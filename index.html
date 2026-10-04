@@ -1,0 +1,74 @@
+<div class="hero">
+  <img class="hero-img" src="hero-wide.jpg" alt="Egyptian temple hall with glowing portal">
+  <canvas class="rain rain--center" aria-hidden="true"></canvas>
+  <canvas class="rain rain--sides"  aria-hidden="true"></canvas>
+</div>
+
+.hero { position: relative; background:#000; height:100svh; overflow:hidden; }
+.hero-img { width:100%; height:100%; object-fit:cover;
+            object-position:center 40%; display:block; }
+
+.rain {
+  position:absolute; inset:0;
+  pointer-events:none;
+  mix-blend-mode: screen;                        /* the key line */
+  filter: drop-shadow(0 0 7px rgba(80,240,230,.65));  /* bloom */
+  mask-repeat: no-repeat;
+  mask-size: cover;
+  mask-position: center 40%;                     /* MUST match object-position */
+  -webkit-mask-repeat: no-repeat;
+  -webkit-mask-size: cover;
+  -webkit-mask-position: center 40%;
+}
+
+/* centre door: subtle. side doors: brighter + faster */
+.rain--center { opacity:.45; mask-image:url(mask-center.png); }
+.rain--sides  { opacity:.95; mask-image:url(mask-sides.png); }
+
+const GLYPHS = '𓀀𓁐𓂀𓃀𓄿𓅱𓆓𓇳𓈖𓊃𓋴𓌙𓍯𓎛𓏏𓐍';
+const FONT = 24, SPEED = 0.55;
+const reduce = matchMedia('(prefers-reduced-motion: reduce)');
+
+function makeRain(canvas, speed){
+  const ctx = canvas.getContext('2d');
+  let dpr = 1, cols = 0, step = FONT, drops = [], raf = null;
+
+  function setup(){
+    dpr  = Math.min(devicePixelRatio || 1, 2);        // cap DPR for mobile perf
+    canvas.width  = Math.round(canvas.clientWidth  * dpr);
+    canvas.height = Math.round(canvas.clientHeight * dpr);
+    step = FONT * dpr;
+    ctx.font = `${step}px "Noto Sans Egyptian Hieroglyphs", monospace`;
+    ctx.textBaseline = 'top';
+    cols  = Math.ceil(canvas.width / step);
+    drops = Array.from({length: cols}, () => Math.random() * -40);
+  }
+
+  function frame(){
+    ctx.fillStyle = 'rgba(0,0,0,0.09)';               // fade = the tail
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    for (let i = 0; i < cols; i++){
+      const x = i * step, y = drops[i] * step;
+      if (y > -step && y < canvas.height + step){
+        ctx.fillStyle = 'rgba(150,255,246,0.95)';     // bright head glyph
+        ctx.fillText(GLYPHS[(Math.random() * GLYPHS.length) | 0], x, y);
+      }
+      drops[i] += speed;
+      if (y > canvas.height && Math.random() > 0.975) drops[i] = Math.random() * -20;
+    }
+    raf = requestAnimationFrame(frame);
+  }
+
+  const start = () => { if (!raf && !reduce.matches){ setup(); frame(); } };
+  const stop  = () => { if (raf){ cancelAnimationFrame(raf); raf = null; } };
+
+  addEventListener('resize', () => { stop(); start(); });
+  new IntersectionObserver(([e]) => e.isIntersecting ? start() : stop()).observe(canvas);
+  document.addEventListener('visibilitychange', () => document.hidden ? stop() : start());
+
+  return { start, stop };
+}
+
+makeRain(document.querySelector('.rain--center'), 0.45).start();
+makeRain(document.querySelector('.rain--sides'),  0.75).start();
