@@ -15,7 +15,7 @@ body {
 .hero {
   height: 100vh;
   background-image: url('hero-banner-temp.png');
-  background-size: cover;
+  background-size: contain;
   background-position: center;
   display: flex;
   align-items: center;
