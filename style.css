@@ -14,7 +14,7 @@ body {
 /* Hero Section with background image */
 .hero {
   height: 100svh;
-  background-image: url('hero-banner-temp.png');
+  background-image: url('hero-banner-temp.jpg');
   background-size: contain;
   background-repeat: no-repeat;
   background-position: center top;
