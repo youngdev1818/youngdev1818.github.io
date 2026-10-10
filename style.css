@@ -16,6 +16,7 @@ body {
   height: 100vh;
   background-image: url('hero-banner-temp.png');
   background-size: contain;
+  background-repeat: no-repeat;
   background-position: center;
   display: flex;
   align-items: center;
