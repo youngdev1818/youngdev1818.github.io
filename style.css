@@ -13,7 +13,7 @@ body {
 
 /* Hero Section with background image */
 .hero {
-  width: 100vh;
+  width: 100svh;
   background-image: url('hero-banner-temp.png');
   background-size: contain;
   background-repeat: no-repeat;
