@@ -24,7 +24,7 @@ body {
   align-items: center;
   justify-content: center end;
   text-align: center;
-  padding-bottom: 300px;
+  padding-bottom: 0;
 }
 
 /* Semi-transparent dark overlay for readability */
