@@ -18,9 +18,11 @@ body {
   background-size: contain;
   background-repeat: no-repeat;
   background-position: center top;
+  
   display: flex;
   align-items: center;
   justify-content: flex-start;
+  flex-direction: column;
   padding-top: 200px;
 }
 
