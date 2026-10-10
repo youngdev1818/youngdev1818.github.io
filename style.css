@@ -13,11 +13,11 @@ body {
 
 /* Hero Section with background image */
 .hero {
-  height: 100vh;
+  width: 100vh;
   background-image: url('hero-banner-temp.png');
   background-size: contain;
   background-repeat: no-repeat;
-  background-position: center;
+  background-position: center top;
   display: flex;
   align-items: center;
   justify-content: center;
