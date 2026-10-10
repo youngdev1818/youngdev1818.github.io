@@ -20,8 +20,9 @@ body {
   background-position: center top;
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
   text-align: center;
+  padding-top: 200px;
 }
 
 /* Semi-transparent dark overlay for readability */
