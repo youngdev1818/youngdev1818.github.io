@@ -22,7 +22,7 @@ body {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center end;
+  justify-content: end;
   text-align: center;
   padding-bottom: 0;
 }
