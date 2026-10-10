@@ -20,10 +20,11 @@ body {
   background-position: center top;
   
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: flex-start;
-  flex-direction: column;
-  padding-top: 200px;
+  text-align: center;
+  padding-top: 0;
 }
 
 /* Semi-transparent dark overlay for readability */
