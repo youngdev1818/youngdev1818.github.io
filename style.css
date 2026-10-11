@@ -63,3 +63,32 @@ body {
 .main-nav a:hover{
   background-color: rgba(0, 255, 204, 0.15);
 }
+
+/* Gallery Header */
+.gallery-header {
+  text-align: center;
+  padding: 40px 20px 20px;
+}
+
+.gallery-header h1 {
+  color: #00ffcc;
+  font-size: clamp(1.5rem, 4vw, 3rem);
+}
+
+.gallery-header p {
+  color: #ffcc00;
+  margin-top: 10px;
+}
+
+/* Gallery Content */
+.gallery-content {
+  max-width: 1200px;
+  margin: 40px auto;
+  padding: 20px;
+  text-align: center;
+}
+
+.gallery-content h2 {
+  color: #00ffcc;
+  margin-bottom: 15px;
+}
