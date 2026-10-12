@@ -150,24 +150,40 @@ body {
 }
 
 /* Stack Slideshow Images */
-.slideshow img {
+.slide-evo-gens {
   position: absolute;
   inset: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
   opacity: 0;
   animation: templeSlides 12s infinite;
 }
 
+/* Individual Slide Captions */
+.slide-caption {
+  color: #ffcc00;
+  text-align: center;
+  padding-top: 10px;
+}
+
+/* Temple Evolution Images */
+.slide-evo-gens img{
+  display: block;
+  width: 100%;
+  height: 300px;
+  object-fit: contain;
+}
+
 /* Stagger Slideshow Images */
-.slideshow img:nth-child(1) {
+.slide-evo-gens:nth-child(1) {
   animation-delay: 0s;
 }
-.slideshow img:nth-child(2) {
+.slide-evo-gens:nth-child(2) {
   animation-delay: -8s;
 }
-.slideshow img:nth-child(3) {
+.slide-evo-gens:nth-child(3) {
   animation-delay: -4s;
 }
 
