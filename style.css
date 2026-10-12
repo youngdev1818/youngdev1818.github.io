@@ -125,6 +125,22 @@ body {
   text-align: center;
 }
 
+/* Portal Evolution Header */
+.portal-header {
+  padding: 60px 20px;
+  text-align: center;
+}
+
+.portal-header h1 {
+  color: #00ffcc;
+  font-size: clamp(1.5rem, 4vw, 3rem);
+}
+
+.portal-header p {
+  color: #ffcc00;
+  margin-top: 10px;
+}
+
 /* Slideshow container */
 .slideshow {
   position: relative;
