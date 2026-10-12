@@ -93,6 +93,7 @@ body {
 
 .gallery-header p {
   color: #ffcc00;
+  font-size: clamp(0.75rem, 2vw, 1.5rem);
   margin-top: 10px;
 }
 
