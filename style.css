@@ -162,7 +162,7 @@ body {
 
 /* Stagger Slideshow Images */
 .slideshow img:nth-child(1) {
-  animation-delay: -12s;
+  animation-delay: 0s;
 }
 .slideshow img:nth-child(2) {
   animation-delay: -8s;
@@ -173,11 +173,11 @@ body {
 
 /* Image Fade */
 @keyframes templeSlides {
-  0% {opacity: 0;}
-  8% {opacity: 0;}
-  25% {opacity: 1;}
-  33.33% {opacity: 1;}
-  100% {opacity: 0;}
+  0% {opacity: 1;}
+  18.33% {opacity: 1;}
+  33.33% {opacity: 0;}
+  85% {opacity: 0;}
+  100% {opacity: 1;}
 }
 
 /* Accessibility: reduce animation */
