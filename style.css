@@ -109,6 +109,11 @@ body {
   margin-bottom: 15px;
 }
 
+.gallery-content p {
+  color: #ffcc00;
+  margin-bottom: 15px;
+}
+
 /* Gallery Image Grid */
 .gallery-grid {
   display: grid;
