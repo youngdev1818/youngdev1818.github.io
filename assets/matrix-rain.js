@@ -1,141 +1,168 @@
-const canvas=document.getElementById("matrix-rain");
-const ctx=canvas.getContext("2d");
 
-// Set canvas drawing resolution.
-canvas.width = canvas.clientWidth;
-canvas.height = canvas.clientHeight;
+const canvas = document.getElementById("matrix-rain");
+const ctx = canvas.getContext("2d");
 
-// Appearence and speed.
-const fontSize = 10;
+// Appearance settings
+const fontSize = 12;
 const trailLength = 14;
+const characters =
+  "𓍝𓀀𓀁𓀗𓀙𓀭𓂀𓂇𓂔𓂖𓂗𓃣𓃨𓅓𓅝𓅪𓆃𓆈𓆉𓆣𓆤𓆘𓇔𓄟𓄬𓄦𓇌𓈗𓉢𓉑𓉨𓉧𓉹𓊂𓊐𓊽𓌑𓌗𓌲𓍳𓍶𓎴𓐥𓐑𓐧𓐒𓐨𓍬𓍢𓍣𓍤𓍥𓍦𓍧𓍨𓍩𓍪";
 
-// Characters available for rain.
-const characters = "アイウエオカキクケコサシスセソタチツテト012345789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+// Mutation probabilities
+const leaderMutation = 0.05;
+const trailMutation = 0.005;
 
-// Number of columns that fit.
-const columns = Math.floor(canvas.width / fontSize);
+// Stream information
+let drops = [];
+let speeds = [];
+let streamCharacters = [];
+let timers = [];
+let columns = 0;
+let lastTime = 0;
 
-// Array to store each column's Y position.
-const drops = [];
-const symbols = [];
-const speeds = [];
-const streamCharacters = [];
-
-// Give each column a random starting point.
-for (let i = 0; i < columns; i++) {
-  drops[i] = Math.random() * canvas.height;
-
+// Choose a random character
+function randomCharacter() {
   const index = Math.floor(
     Math.random() * characters.length
   );
 
-  symbols[i] = characters[index];
+  return characters[index];
+}
 
-  // Random speed for each column.
-  speeds[i] = 0.5 + Math.random() * 2;
+// Prepare the canvas and streams
+function setup() {
+  canvas.width = canvas.clientWidth;
+  canvas.height = canvas.clientHeight;
 
-  // Create a character array for this stream.
-  streamCharacters[i] = [];
+  columns = Math.floor(canvas.width / fontSize);
 
-  for (let j = 0; j < trailLength; j++) {
-    const index = Math.floor(
-      Math.random() * characters.length
+  drops = [];
+  speeds = [];
+  streamCharacters = [];
+  timers = [];
+
+  for (let i = 0; i < columns; i++) {
+
+    // Start at different vertical positions
+    drops[i] = Math.floor(
+      Math.random() * canvas.height / fontSize
     );
 
-    streamCharacters[i][j] = characters[index];
+    // Different speeds: steps per second
+    speeds[i] = 3 + Math.random() * 9;
+
+    timers[i] = 0;
+    streamCharacters[i] = [];
+
+    for (let j = 0; j < trailLength; j++) {
+      streamCharacters[i][j] = randomCharacter();
+    }
   }
 }
 
-// This function draws one frame.
-function draw() {
+// Draw one animation frame
+function draw(time) {
 
-  // Erase previous frame.
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  const deltaTime = Math.min(
+    (time - (lastTime || time)) / 1000,
+    0.05
+  );
 
-  // Set character appearance.
+  lastTime = time;
+
+  ctx.clearRect(
+    0, 0, canvas.width, canvas.height
+  );
+
   ctx.font = `${fontSize}px monospace`;
-  ctx.fillStyle = "#00ffbb";
-  ctx.shadowColor = "#00ffcc";
-  ctx.shadowBlur = 5;
+  ctx.textBaseline = "top";
 
-  // Draw every column.
   for (let i = 0; i < columns; i++) {
 
-    // Choose random character.
-    const character = symbols[i];
+    // Accumulate elapsed time
+    timers[i] += deltaTime;
 
-    // Calculate its horizontal position.
+    // Time needed for one character step
+    const stepTime = 1 / speeds[i];
+
+    // Advance by complete character cells
+    while (timers[i] >= stepTime) {
+      timers[i] -= stepTime;
+      drops[i]++;
+
+      // Previous leader becomes trail character
+      streamCharacters[i].pop();
+      streamCharacters[i].unshift(randomCharacter());
+
+      // Wait until the entire trail exits
+      if (
+        drops[i] >
+        canvas.height / fontSize + trailLength
+      ) {
+        drops[i] = -Math.floor(
+          Math.random() * canvas.height / fontSize
+        );
+      }
+    }
+
+    // Progress toward the next character row.
+    const progress = timers[i] / stepTime;
+
+    // Draw this stream
     const x = i * fontSize;
 
-    // Get this column's vertical position.
-    const y = drops[i];
-
-    // Draw the trailing characters.
     for (let j = trailLength - 1; j >= 0; j--) {
 
-      // Each character sits above the leader
-      const trailY = y - j * fontSize;
+      const y = j === 0 ? (drops[i] + progress) * fontSize : (drops[i] - j) * fontSize;
 
-      // Skip characters outside the canvas
-      if (trailY < 0 || trailY > canvas.height + fontSize) {
+      if (y < 0 || y >= canvas.height) {
         continue;
       }
 
-      // Older characters become dimmer
-      const brightness = 1 - j / trailLength;
+      // Occasionally mutate a character
+      const chance =
+        j === 0 ? leaderMutation : trailMutation;
 
-      ctx.globalAlpha = brightness;
+      if (Math.random() < chance) {
+        streamCharacters[i][j] = randomCharacter();
+      }
+
+      // Fade older characters
+      ctx.globalAlpha = 1 - j / trailLength;
 
       if (j === 0) {
         ctx.fillStyle = "#caffed";
+        ctx.shadowColor = "#00ffcc";
         ctx.shadowBlur = 10;
       } else {
-        ctx.fillStyle = "#00ffbb";
+        ctx.fillStyle = "#00ddff";
         ctx.shadowBlur = 0;
       }
 
-      // Pick a character for this trail position
-      const trailCharacter = j === 0 ? character : streamCharacters[i][j];
+      // Ghost write the lead character imprint.
+      if (j === 0) {
+        ctx.save();
+        ctx.globalAlpha = 0.3 + progress * ((1 - 1 / trailLength) - 0.3);
+        ctx.fillStyle = "#0066ff";
+        ctx.shadowBlur = 0;
+        
+        ctx.fillText(streamCharacters[i][0], x, drops[i] * fontSize);
 
-      ctx.fillText(trailCharacter, x, trailY);
-    }
-
-    // Restore opacity for the next column
-    ctx.globalAlpha = 1;
-
-    // Move this column downward.
-    drops[i] += speeds[i];
-
-    // Occasional character change.
-    if (Math.random() < 0.09) {
-      const index = Math.floor(
-        Math.random() * characters.length
-      );
-
-      symbols[i] = characters[index];
-    }
-
-    // Occasionally mutate individual trail characters.
-    for (let j = 1; j < trailLength; j++) {
-
-      if(Math.random() < 0.005) {
-        const index = Math.floor(
-          Math.random() * characters.length
-        );
-
-        streamCharacters[i][j] = characters[index];
+        // Restore previous settings.
+        ctx.restore();
       }
-    }
 
-    // Restart when it reaches the bottom.
-    if (drops[i] > canvas.height + trailLength * fontSize) {
-      drops[i] = -Math.random() * canvas.height;
+      ctx.fillText(streamCharacters[i][j], x, y);
     }
   }
 
-  // Ask the browser to draw next frame.
+  // Restore normal drawing settings
+  ctx.globalAlpha = 1;
+  ctx.shadowBlur = 0;
+
   requestAnimationFrame(draw);
 }
 
-// Start the animation!
-draw();
+// Start the animation
+setup();
+requestAnimationFrame(draw);
