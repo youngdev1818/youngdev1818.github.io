@@ -42,8 +42,8 @@ function draw() {
 
   // Set character appearance.
   ctx.font = `${fontSize}px monospace`;
-  ctx.fillStyle = "#00ff88";
-  ctx.shadowColor = "#00ff88";
+  ctx.fillStyle = "#00ffbb";
+  ctx.shadowColor = "#00ffcc";
   ctx.shadowBlur = 5;
 
   // Draw every column.
@@ -78,7 +78,7 @@ function draw() {
         ctx.fillStyle = "#caffed";
         ctx.shadowBlur = 10;
       } else {
-        ctx.fillstyle = "00ff88";
+        ctx.fillStyle = "00ffbb";
         ctx.shadowBlur = 0;
       }
 
