@@ -64,6 +64,36 @@ body {
   background-color: rgba(0, 255, 204, 0.15);
 }
 
+/* Matrix Portal Section */
+.matrix-section {
+  width: 100%;
+  padding: 20px 0;
+  display: flex;
+  justify-content: center;
+}
+/* Portal Positioning Container */
+.matrix-portal {
+  position: relative;
+  width: 100%;
+  max-width: 1600px;
+}
+/* Portal Image */
+.matrix-portal-image {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+/* Matrix Rain Canvas */
+#matrix-rain {
+  position: absolute;
+  left: 23.5%;
+  top: 15.1%;
+  width: 52.5%;
+  height: 73.6%;
+  background: rgba(0, 255, 100, 0.0);
+  pointer-events: none;
+}
+
 /* Gallery Header */
 .gallery-header {
   width: 100%;
