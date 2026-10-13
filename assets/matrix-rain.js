@@ -78,7 +78,7 @@ function draw() {
         ctx.fillStyle = "#caffed";
         ctx.shadowBlur = 10;
       } else {
-        ctx.fillStyle = "00ffbb";
+        ctx.fillStyle = "#00ffbb";
         ctx.shadowBlur = 0;
       }
 
