@@ -7,7 +7,6 @@ canvas.height = canvas.clientHeight;
 
 // Appearence and speed.
 const fontSize = 14;
-const speed = 1.5;
 const trailLength = 14;
 
 // Characters available for rain.
@@ -31,7 +30,7 @@ for (let i = 0; i < columns; i++) {
 
   symbols[i] = characters[index];
 
-  // Random speeds for each column
+  // Random speed for each column.
   speeds[i] = 0.5 + Math.random() * 2;
 }
 
@@ -44,7 +43,7 @@ function draw() {
   // Set character appearance.
   ctx.font = `${fontSize}px monospace`;
   ctx.fillStyle = "#00ff88";
-  ctx.shadowColor = "#00ffff";
+  ctx.shadowColor = "#00ff88";
   ctx.shadowBlur = 5;
 
   // Draw every column.
@@ -75,10 +74,16 @@ function draw() {
 
       ctx.globalAlpha = brightness;
 
+      if (j === 0) {
+        ctx.fillStyle = "#caffed";
+        ctx.shadowBlur = 10;
+      } else {
+        ctx.fillstyle = "00ff88";
+        ctx.shadowBlur = 0;
+      }
+
       // Pick a character for this trail possition
-      const trailIndex = Math.floor(
-        Math.random() * characters.length
-      );
+      const trailIndex = (i * 7 + j * 3) % characters.length;
 
       const trailCharacter = j === 0 ? character : characters[trailIndex];
 
@@ -101,7 +106,7 @@ function draw() {
     }
 
     // Restart when it reaches the bottom.
-    if (drops[i] > canvas.height + fontSize) {
+    if (drops[i] > canvas.height + trailLength * fontSize) {
       drops[i] = -Math.random() * canvas.height;
     }
   }
