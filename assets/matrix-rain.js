@@ -6,7 +6,7 @@ const ctx = canvas.getContext("2d");
 const fontSize = 12;
 const trailLength = 14;
 const characters =
-  "アイウエオカキクケコサシスセソタチツテトABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+  "*':;!?,.@#$_&-+()%|/=[]<>{}ABCDEF0123456789";
 
 // Mutation probabilities
 const leaderMutation = 0.05;
