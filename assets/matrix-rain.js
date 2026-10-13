@@ -61,7 +61,7 @@ function draw() {
     drops[i] += speed;
 
     // Occasional character change.
-    if (Math.random() < 0.02) {
+    if (Math.random() < 0.08) {
       const index = Math.floor(
         Math.random() * characters.length
       );
