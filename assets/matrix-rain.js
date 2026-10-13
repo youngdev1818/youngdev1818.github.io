@@ -10,17 +10,24 @@ const fontSize = 12;
 const speed = 1.5;
 
 // Characters available for rain.
-const characters = "アイウエオカキクケコサシスセソタチツテト012345789";
+const characters = "アイウエオカキクケコサシスセソタチツテト012345789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
 // Number of columns that fit.
 const columns = Math.floor(canvas.width / fontSize);
 
 // Array to store each column's Y position.
 const drops = [];
+const symbols = [];
 
 // Give each column a random starting point.
 for (let i = 0; i < columns; i++) {
   drops[i] = Math.random() * canvas.height;
+
+  const index = Math.floor(
+    Math.random() * characters.length
+  );
+
+  symbols[i] = characters[index];
 }
 
 // This function draws one frame.
@@ -39,11 +46,7 @@ function draw() {
   for (let i = 0; i < columns; i++) {
 
     // Choose random character.
-    const index = Math.floor(
-      Math.random() * characters.length
-    );
-
-    const character = characters[index];
+    const character = symbols[i];
 
     // Calculate its horizontal position.
     const x = i * fontSize;
@@ -56,6 +59,15 @@ function draw() {
 
     // Move this column downward.
     drops[i] += speed;
+
+    // Occasional character change.
+    if (Math.random() < 0.02) {
+      const index = Math.floor(
+        Math.random() * characters.length
+      );
+
+      symbols[i] = characters[index];
+    }
 
     // Restart when it reaches the bottom.
     if (drops[i] > canvas.height + fontSize) {
