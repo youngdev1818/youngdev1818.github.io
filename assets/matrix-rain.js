@@ -82,16 +82,16 @@ function draw() {
         ctx.shadowBlur = 0;
       }
 
-      // Pick a character for this trail possition
+      // Pick a character for this trail position
       const trailIndex = (i * 7 + j * 3) % characters.length;
 
       const trailCharacter = j === 0 ? character : characters[trailIndex];
 
-      ctx.fillText(trailCharacter, x, trailY)
+      ctx.fillText(trailCharacter, x, trailY);
     }
 
     // Restore opacity for the next column
-    ctx.globalAlpha = 1
+    ctx.globalAlpha = 1;
 
     // Move this column downward.
     drops[i] += speeds[i];
