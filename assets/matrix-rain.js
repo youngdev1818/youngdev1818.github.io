@@ -6,8 +6,9 @@ canvas.width = canvas.clientWidth;
 canvas.height = canvas.clientHeight;
 
 // Appearence and speed.
-const fontSize = 12;
+const fontSize = 14;
 const speed = 1.5;
+const trailLength = 14;
 
 // Characters available for rain.
 const characters = "アイウエオカキクケコサシスセソタチツテト012345789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
@@ -39,7 +40,7 @@ function draw() {
   // Set character appearance.
   ctx.font = `${fontSize}px monospace`;
   ctx.fillStyle = "#00ff88";
-  ctx.shadowColor = "#00ffcc";
+  ctx.shadowColor = "#00ffff";
   ctx.shadowBlur = 5;
 
   // Draw every column.
@@ -54,14 +55,40 @@ function draw() {
     // Get this column's vertical position.
     const y = drops[i];
 
-    // Draw the character.
-    ctx.fillText(character, x, y);
+    // Draw the trailing characters.
+    for (let j = trailLength - 1; j >= 0; j--) {
+
+      // Each character sits above the leader
+      const trailY = y - j * fontSize;
+
+      // Skip characters outside the canvas
+      if (trailY < 0 || trailY > canvas.height + fontSize) {
+        continue;
+      }
+
+      // Older characters become dimmer
+      const brightness = 1 - j / trailLength;
+
+      ctx.globalAlpha = brightness;
+
+      // Pick a character for this trail possition
+      const trailIndex = Math.floor(
+        Math.random() * characters.length
+      );
+
+      const trailCharacter = j === 0 ? character : characters[trailIndex];
+
+      ctx.fillText(trailCharacter, x, trailY)
+    }
+
+    // Restore opacity for the next column
+    ctx.globalAlpha = 1
 
     // Move this column downward.
     drops[i] += speed;
 
     // Occasional character change.
-    if (Math.random() < 0.08) {
+    if (Math.random() < 0.02) {
       const index = Math.floor(
         Math.random() * characters.length
       );
