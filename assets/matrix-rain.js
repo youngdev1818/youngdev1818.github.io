@@ -6,7 +6,7 @@ const ctx = canvas.getContext("2d");
 const fontSize = 12;
 const trailLength = 14;
 const characters =
-  "𓍝𓀀𓀁𓀗𓀙𓀭𓂀𓂇𓂔𓂖𓂗𓃣𓃨𓅓𓅝𓅪𓆃𓆈𓆉𓆣𓆤𓆘𓇔𓄟𓄬𓄦𓇌𓈗𓉢𓉑𓉨𓉧𓉹𓊂𓊐𓊽𓌑𓌗𓌲𓍳𓍶𓎴𓐥𓐑𓐧𓐒𓐨𓍬𓍢𓍣𓍤𓍥𓍦𓍧𓍨𓍩𓍪";
+  "アイウエオカキクケコサシスセソタチツテトABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
 
 // Mutation probabilities
 const leaderMutation = 0.05;
