@@ -116,12 +116,12 @@ body {
   padding: 40px 20px;
 }
 
-.gallery-header h1 {
+.bday-header h1 {
   color: #00ffcc;
   font-size: clamp(1.5rem, 4vw, 3rem);
 }
 
-.gallery-header p {
+.bday-header p {
   color: #ffcc00;
   font-size: clamp(0.75rem, 2vw, 1.5rem);
   margin-top: 10px;
