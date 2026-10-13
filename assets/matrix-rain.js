@@ -19,6 +19,7 @@ const columns = Math.floor(canvas.width / fontSize);
 const drops = [];
 const symbols = [];
 const speeds = [];
+const streamCharacters = [];
 
 // Give each column a random starting point.
 for (let i = 0; i < columns; i++) {
@@ -32,6 +33,17 @@ for (let i = 0; i < columns; i++) {
 
   // Random speed for each column.
   speeds[i] = 0.5 + Math.random() * 2;
+
+  // Create a character array for this stream.
+  streamCharacters[i] = [];
+
+  for (let j = 0; j < trailLength; j++) {
+    const index = Math.floor(
+      Math.random() * characters.length
+    );
+
+    streamCharacters[i][j] = characters[index];
+  }
 }
 
 // This function draws one frame.
@@ -83,9 +95,7 @@ function draw() {
       }
 
       // Pick a character for this trail position
-      const trailIndex = (i * 7 + j * 3) % characters.length;
-
-      const trailCharacter = j === 0 ? character : characters[trailIndex];
+      const trailCharacter = j === 0 ? character : streamCharacters[i][j];
 
       ctx.fillText(trailCharacter, x, trailY);
     }
@@ -103,6 +113,18 @@ function draw() {
       );
 
       symbols[i] = characters[index];
+    }
+
+    // Occasionally mutate individual trail characters.
+    for (let j = 1; j < trailLength; j++) {
+
+      if(Math.random() < 0.005) {
+        const index = Math.floor(
+          Math.random() * characters.length
+        );
+
+        streamCharacters[i][j] = characters[index];
+      }
     }
 
     // Restart when it reaches the bottom.
