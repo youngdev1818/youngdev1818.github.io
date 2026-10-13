@@ -6,7 +6,7 @@ canvas.width = canvas.clientWidth;
 canvas.height = canvas.clientHeight;
 
 // Appearence and speed.
-const fontSize = 14;
+const fontSize = 10;
 const trailLength = 14;
 
 // Characters available for rain.
