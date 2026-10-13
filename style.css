@@ -118,7 +118,7 @@ body {
 
 .bday-header h1 {
   color: #00ffcc;
-  font-size: clamp(1.5rem, 4vw, 3rem);
+  font-size: clamp(2rem, 5vw, 4rem);
 }
 
 .bday-header p {
