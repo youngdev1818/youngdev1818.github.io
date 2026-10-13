@@ -19,6 +19,7 @@ const columns = Math.floor(canvas.width / fontSize);
 // Array to store each column's Y position.
 const drops = [];
 const symbols = [];
+const speeds = [];
 
 // Give each column a random starting point.
 for (let i = 0; i < columns; i++) {
@@ -29,6 +30,9 @@ for (let i = 0; i < columns; i++) {
   );
 
   symbols[i] = characters[index];
+
+  // Random speeds for each column
+  speeds[i] = 0.5 + Math.random() * 2;
 }
 
 // This function draws one frame.
@@ -85,7 +89,7 @@ function draw() {
     ctx.globalAlpha = 1
 
     // Move this column downward.
-    drops[i] += speed;
+    drops[i] += speeds[i];
 
     // Occasional character change.
     if (Math.random() < 0.02) {
