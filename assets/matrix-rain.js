@@ -20,7 +20,7 @@ const drops = [];
 
 // Give each column a random starting point.
 for (let i = 0; i < columns; i++) {
-  drop[i] = Math.random() * canvas.height;
+  drops[i] = Math.random() * canvas.height;
 }
 
 // This function draws one frame.
