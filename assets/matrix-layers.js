@@ -36,7 +36,7 @@ function createRainLayer(canvasId, settings) {
 }
 
 const farLayer = createRainLayer("matrix-far", {
-  fontSize: 8,
+  fontSize: 10,
   trailLength: 9,
   speedMin: 1,
   speedMax: 3,
@@ -44,7 +44,7 @@ const farLayer = createRainLayer("matrix-far", {
 });
 
 const midLayer = createRainLayer("matrix-mid", {
-  fontSize: 10,
+  fontSize: 16,
   trailLength: 11,
   speedMin: 2,
   speedMax: 6,
@@ -52,7 +52,7 @@ const midLayer = createRainLayer("matrix-mid", {
 });
 
 const frontLayer = createRainLayer("matrix-rain", {
-  fontSize: 12,
+  fontSize: 22,
   trailLength: 14,
   speedMin: 3,
   speedMax: 12,
@@ -61,13 +61,13 @@ const frontLayer = createRainLayer("matrix-rain", {
 
 function setupLayer(layer) {
 
-  // Measure the portal container.
+  // Meaaure the portal container.
   const portalWidth = layer.canvas.parentElement.clientWidth;
 
   // Scale the characters to the available space.
   const scale = Math.max( 0.5, Math.min(1, portalWidth / 1000));
 
-  // Apply the same scale to every depth layer
+  // Apply the same scale to every depth layer.
   layer.fontSize = layer.baseFontSize * scale;
 
   // Give this canvas its own drawing resolution
@@ -142,7 +142,7 @@ function drawLayer(layer, deltaTime) {
       // Reset after the entire trail leaves.
       if ( layer.drops[i] > canvas.height / fontSize + trailLength) {
         layer.drops[i] = -Math.floor(
-          Math.random() * canvas.height / fontSize
+          trailLength * (1 + Math.random() * 2)
         );
       }
     }
@@ -221,8 +221,7 @@ function resizeRain() {
   setupLayer(frontLayer);
 }
 
-// Recalculate when the browser dimensions change
-window.addEventListener("reaize", resizeRain);
+window.addEventListener("resize", resizeRain);
 
 let lastTime = 0;
 
