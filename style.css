@@ -245,7 +245,7 @@ body {
   align-items: center;
   justify-content: center;
   opacity: 0;
-  animation: templeSlides 9s infinite;
+  animation: templeSlides 18s infinite;
 }
 
 /* Individual Slide Captions */
