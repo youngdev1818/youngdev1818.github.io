@@ -286,9 +286,9 @@ body {
 /* Image Fade */
 @keyframes templeSlides {
   0% {opacity: 1;}
-  18.33% {opacity: 1;}
-  33.33% {opacity: 0;}
-  85% {opacity: 0;}
+  13% {opacity: 1;}
+  16.667% {opacity: 0;}
+  96.333% {opacity: 0;}
   100% {opacity: 1;}
 }
 
