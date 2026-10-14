@@ -17,6 +17,7 @@ function createRainLayer(canvasId, settings) {
     canvas: canvas,
     ctx: ctx,
 
+    baseFontSize: settings.fontSize,
     fontSize: settings.fontSize,
     trailLength: settings.trailLength,
 
@@ -59,6 +60,15 @@ const frontLayer = createRainLayer("matrix-rain", {
 });
 
 function setupLayer(layer) {
+
+  // Measure the portal container.
+  const portalWidth = layer.canvas.parentElement.clientWidth;
+
+  // Scale the characters to the available space.
+  const scale = Math.max( 0.5, Math.min(1, portalWidth / 1000));
+
+  // Apply the same scale to every depth layer
+  layer.fontSize = layer.baseFontSize * scale;
 
   // Give this canvas its own drawing resolution
   layer.canvas.width = layer.canvas.clientWidth;
@@ -204,6 +214,15 @@ function drawLayer(layer, deltaTime) {
 setupLayer(farLayer);
 setupLayer(midLayer);
 setupLayer(frontLayer);
+
+function resizeRain() {
+  setupLayer(farLayer);
+  setupLayer(midLayer);
+  setupLayer(frontLayer);
+}
+
+// Recalculate when the browser dimensions change
+window.addEventListener("reaize", resizeRain);
 
 let lastTime = 0;
 
