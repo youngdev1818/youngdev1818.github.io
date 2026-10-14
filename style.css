@@ -86,10 +86,10 @@ body {
 /* Matrix Rain Canvas */
 #matrix-rain {
   position: absolute;
-  left: 23.5%;
-  top: 15.1%;
-  width: 52.5%;
-  height: 73.6%;
+  left: 24.45%;
+  top: 17.5%;
+  width: 50.7%;
+  height: 70.3%;
   z-index: 3;
   background: rgba(0, 255, 100, 0.0);
   pointer-events: none;
