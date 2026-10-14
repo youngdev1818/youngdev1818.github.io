@@ -90,6 +90,29 @@ body {
   top: 15.1%;
   width: 52.5%;
   height: 73.6%;
+  z-index: 3;
+  background: rgba(0, 255, 100, 0.0);
+  pointer-events: none;
+}
+
+#matrix-mid {
+  position: absolute;
+  left: 25.5%;
+  top: 17.8%;
+  width: 49%;
+  height: 66.8%;
+  z-index: 2;
+  background: rgba(0, 255, 100, 0.0);
+  pointer-events: none;
+}
+
+#matrix-far {
+  position: absolute;
+  left: 29%;
+  top: 17.8%;
+  width: 42%;
+  height: 64%;
+  z-index: 1;
   background: rgba(0, 255, 100, 0.0);
   pointer-events: none;
 }
