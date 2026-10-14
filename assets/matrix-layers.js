@@ -1,4 +1,4 @@
-const characters = "*':;!?,.@#$_&-+()%|/=[]<>{}\\ABCDEF0123456789";
+const characters = "*':;!?,.@#$_&-+()%|/=[]<>{}\\\"ABCDEF0123456789";
 
 function randomCharacter() {
   const index = Math.floor(
@@ -35,19 +35,19 @@ function createRainLayer(canvasId, settings) {
 }
 
 const farLayer = createRainLayer("matrix-far", {
-  fontSize: 7,
+  fontSize: 8,
   trailLength: 9,
   speedMin: 1,
   speedMax: 3,
-  opacity: 0.25
+  opacity: 0.5
 });
 
 const midLayer = createRainLayer("matrix-mid", {
-  fontSize: 9,
+  fontSize: 10,
   trailLength: 11,
   speedMin: 2,
   speedMax: 6,
-  opacity: 0.5
+  opacity: 0.75
 });
 
 const frontLayer = createRainLayer("matrix-rain", {
@@ -103,7 +103,7 @@ function drawLayer(layer, deltaTime) {
 
   const ctx = layer.ctx;
   const canvas = layer.canvas;
-  const frontSize = layer.fontSize;
+  const fontSize = layer.fontSize;
   const trailLength = layer.trailLength;
 
   // Clear this layer without hiding the portal.
@@ -166,8 +166,8 @@ function drawLayer(layer, deltaTime) {
       if (j === 0) {
 
         // Bright leading character.
-        ctx.fillStyle = "#caffed";
-        ctx.shadowColor = "#00ffcc";
+        ctx.fillStyle = "#caffee";
+        ctx.shadowColor = "#00ffee";
         ctx.shadowBlur = 10 * layer.opacity;
 
         // Draw the stationary imprints FIRST.
@@ -176,7 +176,7 @@ function drawLayer(layer, deltaTime) {
         ctx.globalAlpha = (0.8 + progress * ((1 - 1 / trailLength) - 0.8))
           * layer.opacity;
 
-        ctx.fillStyle = "#006644";
+        ctx.fillStyle = "#00eeff";
         ctx.shadowBlur = 0;
 
         ctx.fillText(
@@ -187,7 +187,7 @@ function drawLayer(layer, deltaTime) {
       } else {
 
         // Ordinary trailing character.
-        ctx.fillStyle = "#00ff88";
+        ctx.fillStyle = "#00bbff";
         ctx.shadowBlur = 0;
       }
 
