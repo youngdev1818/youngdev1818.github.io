@@ -178,7 +178,7 @@ body {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
+  justify-content: end;
   
   text-align: center;
   padding: 40px 20px;
@@ -198,8 +198,8 @@ body {
 /* Gallery Content */
 .gallery-content {
   max-width: 1200px;
-  margin: 40px auto;
-  padding: 20px;
+  margin: 0px auto;
+  padding: 0px;
   text-align: center;
 }
 
