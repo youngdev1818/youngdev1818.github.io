@@ -1,0 +1,197 @@
+/* Portal Evolution Header */
+.portal-header {
+  padding: 60px 20px;
+  text-align: center;
+}
+
+.portal-header h1 {
+  color: #00ffcc;
+  font-size: clamp(1.5rem, 4vw, 3rem);
+}
+
+.portal-header p {
+  color: #ffcc00;
+  margin-top: 10px;
+}
+
+/* Slideshow container */
+.slideshow {
+  position: relative;
+  width: 100%;
+  height: 300px;
+  overflow: hidden;
+}
+
+/* Stack Slideshow Images */
+.slide-evo-gens {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  animation: templeSlides 18s infinite;
+}
+
+/* Individual Slide Captions */
+.slide-caption {
+  color: #ffcc00;
+  text-align: center;
+  padding-top: 10px;
+}
+
+/* Temple Evolution Images */
+.slide-evo-gens img{
+  display: block;
+  width: 100%;
+  height: 300px;
+  object-fit: contain;
+}
+
+/* Stagger Slideshow Images */
+.slide-evo-gens:nth-child(1) {
+  animation-delay: 0s;
+}
+.slide-evo-gens:nth-child(2) {
+  animation-delay: -15s;
+}
+.slide-evo-gens:nth-child(3) {
+  animation-delay: -12s;
+}
+.slide-evo-gens:nth-child(4) {
+  animation-delay: -9s;
+}
+.slide-evo-gens:nth-child(5) {
+  animation-delay: -6s;
+}
+.slide-evo-gens:nth-child(6) {
+  animation-delay: -3s;
+}
+
+/* Image Fade */
+@keyframes templeSlides {
+  0% {opacity: 1;}
+  13% {opacity: 1;}
+  16.667% {opacity: 0;}
+  96.333% {opacity: 0;}
+  100% {opacity: 1;}
+}
+
+/* Accessibility: reduce animation */
+@media (prefers-reduced-motion: reduce) {
+  slideshow img {
+    animation: none;
+    opacity: 0;
+  }
+  
+  .slideshow img:first-child {
+    opacity: 1;
+  }
+}
+
+/* Lightbox background */
+.lightbox {
+  width: min(95vw, 1100px);
+  max-height: 90vh;
+  max-height: 90dvh;
+  padding: 20px;
+  border: 1px solid #00ffcc;
+  border-radius: 12px;
+  background: #020d0b;
+  color: white;
+  box-sizing: border-box;
+}
+
+/* Dark overlay behind popup */
+.lightbox::backdrop {
+  background: rgba(0,0,0,0.5);
+}
+
+/* Lightbox content */
+.lightbox-content {
+  position: relative;
+  text-align: center;
+}
+
+.lightbox h2 {
+  color: #00ffcc;
+  padding-right: 35px;
+}
+
+/* Close Button */
+.lightbox-close {
+  position: absolute;
+  top: 0;
+  right: 0;
+  background: none;
+  border: none;
+  color: #00ffcc;
+  font-size: 32px;
+  cursor: pointer;
+}
+
+/* Image viewer */
+.lightbox-viewer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+#lightbox-image {
+  display: block;
+  width: 100%;
+  min-width: 0;
+  max-height: 65vh;
+  max-height: 65dvh;
+  object-fit: contain;
+}
+
+/* Navigation arrows */
+.lightbox-prev, .lightbox-next {
+  flex-shrink: 0;
+  background: rgba(0,255,204,0.08);
+  color: #00ffcc;
+  border: 1px solid rgba(0,255,204,0.3);
+  border-radius: 8px;
+  padding: 12px;
+  cursor: pointer;
+}
+
+/* Caption */
+#lightbox-caption {
+  color: #ffcc00;
+  margin: 15px 0;
+}
+
+/* Navigation dots */
+.lightbox-dots {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 12px;
+  padding: 10px;
+}
+
+.lightbox-dots button {
+  width: 12px;
+  height: 12px;
+  padding: 0;
+  border: none;
+  border-radius: 50%;
+  background: #45615b;
+  cursor: pointer;
+}
+
+.lightbox-dots button.active {
+  background: #00ffcc;
+  box-shadow: 0 0 10px #00ffcc;
+}
+
+/* Visible keyboard focus */
+.lightbox button:focus-visible {
+  outline: 2px solid #ffcc00;
+  outline-offset: 4px;
+}
