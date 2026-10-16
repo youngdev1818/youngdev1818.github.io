@@ -66,6 +66,26 @@
   100% {opacity: 1;}
 }
 
+/* Original Portal Image */
+.slide-origin-portal img{
+  display: block;
+  width: 100%;
+  height: 300px;
+  object-fit: contain;
+}
+
+/* Stack Slideshow Images */
+.slide-origin-portal {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  opacity: 1;
+  animation: none;
+}
+
 /* Cat Evolution Images */
 .slide-evo-cat img{
   display: block;
@@ -154,12 +174,12 @@
 
 /* Accessibility: reduce animation */
 @media (prefers-reduced-motion: reduce) {
-  slideshow img {
+  slideshow > div {
     animation: none;
     opacity: 0;
   }
   
-  .slideshow img:first-child {
+  .slideshow div:first-child {
     opacity: 1;
   }
 }
@@ -266,6 +286,15 @@
 
 /* Visible keyboard focus */
 .lightbox button:focus-visible {
+  outline: 2px solid #ffcc00;
+  outline-offset: 4px;
+}
+
+/* Identify interactive gallery cards */
+.lightbox-trigger {cursor: pointer;}
+
+/* Keyboard focus */
+.lightbox-trigger:focus-visible {
   outline: 2px solid #ffcc00;
   outline-offset: 4px;
 }
