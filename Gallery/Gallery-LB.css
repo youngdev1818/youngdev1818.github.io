@@ -1,0 +1,118 @@
+/* Lightbox background */
+.lightbox {
+  width: min(95vw, 1100px);
+  max-height: 90vh;
+  max-height: 90dvh;
+  padding: 20px;
+  border: 1px solid #00ffcc;
+  border-radius: 12px;
+  background: #020d0b;
+  color: white;
+  box-sizing: border-box;
+  position: fixed;
+  inset: 0;
+  margin: auto;
+  overflow: auto;
+}
+
+/* Dark overlay behind popup */
+.lightbox::backdrop {
+  background: rgba(0,0,0,0.5);
+}
+
+/* Lightbox content */
+.lightbox-content {
+  position: relative;
+  text-align: center;
+}
+
+.lightbox h2 {
+  color: #00ffcc;
+  padding-right: 35px;
+}
+
+/* Close Button */
+.lightbox-close {
+  position: absolute;
+  top: 0;
+  right: 0;
+  background: none;
+  border: none;
+  color: #00ffcc;
+  font-size: 32px;
+  cursor: pointer;
+}
+
+/* Image viewer */
+.lightbox-viewer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+#lightbox-image {
+  display: block;
+  width: 100%;
+  min-width: 0;
+  max-height: 65vh;
+  max-height: 65dvh;
+  object-fit: contain;
+}
+
+/* Navigation arrows */
+.lightbox-prev, .lightbox-next {
+  flex-shrink: 0;
+  background: rgba(0,255,204,0.08);
+  color: #00ffcc;
+  border: 1px solid rgba(0,255,204,0.3);
+  border-radius: 8px;
+  padding: 12px;
+  cursor: pointer;
+}
+
+/* Caption */
+#lightbox-caption {
+  color: #ffcc00;
+  margin: 15px 0;
+}
+
+/* Navigation dots */
+.lightbox-dots {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 12px;
+  padding: 10px;
+}
+
+.lightbox-dots button {
+  width: 12px;
+  height: 12px;
+  padding: 0;
+  border: none;
+  border-radius: 50%;
+  background: #45615b;
+  cursor: pointer;
+}
+
+.lightbox-dots button.active {
+  background: #00ffcc;
+  box-shadow: 0 0 10px #00ffcc;
+}
+
+/* Visible keyboard focus */
+.lightbox button:focus-visible {
+  outline: 2px solid #ffcc00;
+  outline-offset: 4px;
+}
+
+/* Identify interactive gallery cards */
+.lightbox-trigger {cursor: pointer;}
+
+/* Keyboard focus */
+.lightbox-trigger:focus-visible {
+  outline: 2px solid #ffcc00;
+  outline-offset: 4px;
+}
