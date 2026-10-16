@@ -1,45 +1,24 @@
-const slides = [
-  {
-    src: "Gallery/Portal/Evo-Gensss/dev-gensss1.jpg",
-    caption: "Original Assembly"
-  },
-  {
-    src: "Gallery/Portal/Evo-Gensss/dev-gensss2.jpg",
-    caption: "Phase 2"
-  },
-  {
-    src: "Gallery/Portal/Evo-Gensss/dev-gensss3.jpg",
-    caption: "Phase 3"
-  },
-  {
-    src: "Gallery/Portal/Evo-Gensss/dev-gensss4.jpg",
-    caption: "Phase 4"
-  },
-  {
-    src: "Gallery/Portal/Evo-Gensss/dev-gensss5.jpg",
-    caption: "Phase 5"
-  },
-  {
-    src: "Gallery/Portal/Evo-Gensss/dev-gensss6.jpg",
-    caption: "Phase 6"
-  }
-];
-
+/* Reusable Gallery Lightbox */
 const lightbox = document.getElementById("temple-lightbox");
 const image = document.getElementById("lightbox-image");
 const caption = document.getElementById("lightbox-caption");
 const dots = document.getElementById("lightbox-dots");
-const card = document.querySelector(".slideshow").closest(".gallery-card");
+const title = lightbox.querySelector("h2");
 
+let slides = [];
 let currentSlide = 0;
 
 /* Display selected image */
 function showSlide(index) {
+  if (!slides.length) return;
+  
   currentSlide = (index + slides.length) % slides.length;
 
-  image.src = slides[currentSlide].src;
-  image.alt = slides[currentSlide].caption;
-  caption.textContent = slides[currentSlide].caption;
+  const slide = slides[currentSlide]
+
+  image.src = slide.src;
+  image.alt = slide.alt;
+  caption.textContent = slide.caption;
 
   dots.querySelectorAll("button").forEach((dot, i) => {
     dot.classList.toggle("active", i === currentSlide);
@@ -47,38 +26,72 @@ function showSlide(index) {
   });
 }
 
-/* Generate navigation dots */
-slides.forEach((slide, index) => {
-  const dot = document.createElement("button");
-  dot.type = "button";
-  dot.setAttribute("aria-label", "View" + slide.caption);
-  dot.addEventListener("click", () => {showSlide(index)});
-  dots.appendChild(dot);
-});
+/* Open any slideshow card */
+function openGallery(card) {
+  const elements = card.querySelectorAll(".slideshow > div");
 
-/* Open popup */
-card.addEventListener("click", () => {
+  slides = Array.from(elements).map(element => {
+    const img = element.querySelector("img");
+    const text = element.querySelector(".slide-caption");
+
+    return {
+      src: img.src,
+      alt: img.alt,
+      caption: text?.textContent.trim() || img.alt
+    };
+  });
+
+  if (!slides.length) return;
+
+  title.textContent =
+    card.querySelector("figcaption")?.textContent.trim() || "Artwork Gallery";
+
+  /* Navigation Dots */
+  dots.replaceChildren();
+
+  slides.forEach((slide, index) => {
+    const dot = document.createElement("button");
+    dot.type = "button";
+    dot.setAttribute("aria-label", "View" + slide.caption);
+    dot.addEventListener("click", () => {showSlide(index)});
+    dots.appendChild(dot);
+  });
+
   showSlide(0);
   lightbox.showModal();
+}
+
+/* Connect all slideshow cards */
+document.querySelectorAll(".lightbox-trigger").forEach(card => {
+  card.addEventListener("click", () => openGallery(card));
+
+  card.addEventListener("keydown", event => {
+    if (event.key === "Enter" || event.key === " ") {
+      event.preventDefault();
+      openGallery(card);
+    }
+  });
 });
 
 /* Previous image */
-document.querySelector(".lightbox-prev")
+lightbox.querySelector(".lightbox-prev")
   .addEventListener("click", () => {
     showSlide(currentSlide - 1);
   });
 
 /* Next image */
-document.querySelector(".lightbox-next")
+lightbox.querySelector(".lightbox-next")
   .addEventListener("click", () => {
     showSlide(currentSlide + 1);
   });
 
 /* Close popup */
-document.querySelector(".lightbox-close")
+lightbox.querySelector(".lightbox-close")
   .addEventListener("click", () => {
     lightbox.close();
   });
+
+/* Close when clicking the backdrop*/
 lightbox.addEventListener("click", (event) => {
   if (event.target === lightbox) {lightbox.close}
 });
