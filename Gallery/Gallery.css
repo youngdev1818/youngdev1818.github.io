@@ -1,1 +1,82 @@
+/* Gallery Header */
+.gallery-header {
+  width: 100%;
+  max-width: 1600px;
+  margin: 0 auto;
+  
+  background-image: url("Gallery/dev_banner_tall.jpg");
+  background-size: 100% auto;
+  background-position: center;
+  background-repeat: no-repeat;
+  
+  min-height: 340px;
 
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  
+  text-align: center;
+  padding: 40px 20px;
+}
+
+.gallery-header h1 {
+  color: #00ffcc;
+  font-size: clamp(1.5rem, 4vw, 3rem);
+}
+
+.gallery-header p {
+  color: #ffcc00;
+  font-size: clamp(0.75rem, 2vw, 1.5rem);
+  margin-top: 10px;
+}
+
+/* Gallery Content */
+.gallery-content {
+  max-width: 1200px;
+  margin: 0px auto;
+  padding: 0px;
+  text-align: center;
+}
+
+.gallery-content h2 {
+  color: #00ffcc;
+  margin-bottom: 15px;
+}
+
+.gallery-content p {
+  color: #ffcc00;
+  margin-bottom: 15px;
+}
+
+/* Gallery Image Grid */
+.gallery-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr));
+  gap: 24px;
+  margin-top: 30px;
+}
+
+/* Individual Artwork Cards */
+.gallery-card {
+  margin: 0;
+  padding: 12px;
+  border: 1px solid rgba(0, 255, 204, 0.3);
+  border-radius: 12px;
+  background: rgba(0, 255, 204, 0.05);
+}
+
+/* Artwork Images */
+.gallery-card img {
+  display: block;
+  width: 100%;
+  height: 300px;
+  object-fit: contain;
+}
+
+/* Artwork Captions */
+.gallery-card figcaption {
+  color: #ffcc00;
+  padding-top: 12px;
+  text-align: center;
+}
