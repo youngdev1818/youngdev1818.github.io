@@ -37,3 +37,22 @@ imageInput.addEventListener("change", () => {
   // Load the image
   imagePreview.src = imageURL;
 });
+
+const coordinateResult = document.querySelector("#coordinate-results");
+
+imagePreview.addEventListener("pointerdown", (event) => {
+
+  // Find the image's possition and display size
+  const rect = imagePreview.getBoundingClientRect();
+
+  // Find the touch possition relative to the image
+  const displayX = event.clientX - rect.left;
+  const displayY = event.clientY - rect.top;
+
+  // Convert to original image coordinates
+  const x = Math.round(displayX * (imagePreview.naturalWidth / rect.width));
+  const y = Math.round(displayY * (imagePreview.naturalHeight / rect.height));
+
+  // Display the result
+  coordinateResult.textContent = `X: ${x}, Y: ${y}`;
+});
