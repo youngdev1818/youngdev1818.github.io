@@ -33,7 +33,7 @@
   margin: 1.5rem auto;
 }
 
-#image-stage[hiden] {display: none;}
+#image-stage[hidden] {display: none;}
 
 /* Responsive Image */
 #image-preview {
@@ -42,5 +42,5 @@
   height: auto;
   max-width: 100%;
   max-height: 70dvh;
-  border: 1px solid rgba(0, 255. 204. 0.45);
+  outline: 1px solid rgba(0, 255. 204. 0.45);
 }
