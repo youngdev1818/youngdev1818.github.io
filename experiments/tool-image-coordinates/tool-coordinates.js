@@ -38,7 +38,7 @@ imageInput.addEventListener("change", () => {
   imagePreview.src = imageURL;
 });
 
-const coordinateResult = document.querySelector("#coordinate-results");
+const coordinateResult = document.querySelector("#coordinate-result");
 
 imagePreview.addEventListener("pointerdown", (event) => {
 
