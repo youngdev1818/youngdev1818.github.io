@@ -43,4 +43,6 @@
   max-width: 100%;
   max-height: 70dvh;
   outline: 1px solid rgba(0, 255. 204. 0.45);
+  cursor: crosshair;
+  touch-action: manipulation;
 }
