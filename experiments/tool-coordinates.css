@@ -1,0 +1,46 @@
+/* Main Experiment Container */
+.coordinate-tool {
+  max-width: 1100px;
+  margin: 2rem auto;
+  padding: 0 1rem;
+  text-align: center;
+}
+
+/* Heading */
+.coordinate-tool h1 {
+  color: #00ffcc;
+  font-size:clamp(1.4rem, 4vw, 2rem);
+}
+
+/* Description and image information */
+.coordinate-tool p {
+  margin: 1rem 0;
+  line-height: 1.5;
+}
+
+/*file Selection */
+#image-file {
+  display: block;
+  max-width: 100%;
+  margin: 1rem auto;
+}
+
+/* Image Container */
+#image-stage {
+  position: relative;
+  width: fit-content;
+  max-width: 100%;
+  margin: 1.5rem auto;
+}
+
+#image-stage[hiden] {display: none;}
+
+/* Responsive Image */
+#image-preview {
+  display: block;
+  width: auto;
+  height: auto;
+  max-width: 100%;
+  max-height: 70dvh;
+  border: 1px solid rgba(0, 255. 204. 0.45);
+}
