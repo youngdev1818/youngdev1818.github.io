@@ -20,14 +20,14 @@
     <p>Your image stays on your device and is never uploaded. Only one image is displayed at a time.</p>
 
     <label for="image-file">Select an image:</label>
-    <input type="file" id="image-file" accept="image/">
+    <input type="file" id="image-file" accept="image/*">
 
     <p id="image-details" role="status">No image selected.</p>
 
     <div class="workspace-toolbar">
       <div class="ratio-controls">
         <button id="ratio-image" type="button">
-          Image Ratio
+          Default
         </button>
 
         <button id="ratio-square" type="button">
@@ -35,11 +35,11 @@
         </button>
 
         <button id="ratio-applied" type="button">
-          <!-- Updated Apply ratio x,y -->
+          Last Custom
         </button>
 
         <label>X
-          <input id="ratio-y" type="number"
+          <input id="ratio-x" type="number"
             min="0.01" step="any" value="1">
         </label>
         <span>:</span>
@@ -51,6 +51,16 @@
         <button id="ratio-apply" type="button">
           Apply
         </button>
+      </div>
+
+      <div class="view-controls">
+        <button id="fit-image" type="button" disabled>
+          Fit Image
+        </button>
+
+        <output id="zoom-readout" aria-label="Image zoom">
+          100%
+        </output>
       </div>
 
       <label class="pan-lock">
