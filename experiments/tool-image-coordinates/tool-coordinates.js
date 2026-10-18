@@ -11,6 +11,7 @@ const coordinateResult = document.querySelector("#coordinate-result");
 
 const undoButton = document.querySelector("#undo-point");
 const clearButton = document.querySelector("#clear-points");
+const copyButton = document.querySelector("#copy-svg);
 
 const points = [];
 const letters = ["A", "B", "C", "D"];
@@ -132,6 +133,7 @@ function drawPoints() {
 
   undoButton.disabled = points.length === 0;
   clearButton.disabled = points.length === 0;
+  copyButton.disabled = points.length !== 4;
 
   coordinateResult.textContent = points.length === 4
     ? "4/4 points — Polygon complete!" : `${points.length}/4 points selected`;
