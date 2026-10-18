@@ -11,7 +11,7 @@ const coordinateResult = document.querySelector("#coordinate-result");
 
 const undoButton = document.querySelector("#undo-point");
 const clearButton = document.querySelector("#clear-points");
-const copyButton = document.querySelector("#copy-svg);
+const copyButton = document.querySelector("#copy-svg");
 
 const points = [];
 const letters = ["A", "B", "C", "D"];
