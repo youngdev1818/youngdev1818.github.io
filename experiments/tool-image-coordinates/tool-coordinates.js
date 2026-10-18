@@ -66,32 +66,138 @@ imageInput.addEventListener("change", () => {
   imagePreview.src = imageURL;
 });
 
-imagePreview.addEventListener("pointerdown", (event) => {
+function getImageCoordinates(event) {
+  const rect = imagePreview.getBoundingClientRect();
+  const x = Math.round((event.clientX - rect.left) * imagePreview.naturalWidth / rect.width)
+  const y = Math.round((event.clientY - rect.top) * imagePreview.naturalHeight / rect.height);
 
-  // Only collect four points
-  if (points.length >= 4) return;
+  return {
+    x: Math.max(0, Math.min(imagePreview.naturalWidth, x)),
+    y: Math.max(0, Math.min(imagePreview.naturalHeight, y))
+  };
+}
 
-  // Find the image's possition and display size
+function findMarker(event) {
   const rect = imagePreview.getBoundingClientRect();
 
-  // Find the touch possition relative to the image
-  const displayX = event.clientX - rect.left;
-  const displayY = event.clientY - rect.top;
+  let closestIndex = -1;
+  let smallestDistance = 24 * 24;
 
-  // Convert to original image coordinates
-  const x = Math.round(displayX * (imagePreview.naturalWidth / rect.width));
-  const y = Math.round(displayY * (imagePreview.naturalHeight / rect.height));
+  points.forEach((point, index) => {
 
-  // Save the new coordinate
-  points.push({x,y});
+    // Convert the marker's original coordinates
+    // into its displayed screen position
+    const markerX = rect.left + point.x / imagePreview.naturalWidth * rect.width;
+    const markerY = rect.top + point.y / imagePreview.naturalHeight * rect.height;
+    const dx = event.clientX - markerX;
+    const dy = event.clientY - markerY;
+    const distanceSquared = dx * dx + dy * dy;
 
-  // Redraw the overlay
+    if (distanceSquared < smallestDistance) {
+      smallestDistance = distanceSquared;
+      closestIndex = index;
+    }
+  });
+
+  return closestIndex;
+}
+
+let activePointerId = null;
+let draggedPoint = -1;
+
+imagePreview.addEventListener("pointerdown", (event) => {
+
+  // Only respond to primary mouse button
+  if (event.pointerType === "mouse" && event.button !==0) {
+    return;
+  }
+
+  // Ignore additional fingers while dragging
+  if (activePointerId !== null) return;
+
+  // Check whether we touched an existing marker
+  const markerIndex = findMarker(event);
+
+  if (markerIndex !== -1) {
+    draggedPoint = markerIndex;
+    activePointerId = event.pointerId;
+
+    imagePreview.setPointerCapture(event.pointerId);
+    imagePreview.style.cursor = "grabbing";
+
+    return;
+  }
+
+  // Otherwise, add new point if space remains
+  if (points.length >= 4) return;
+
+  const newPoint = getImageCoordinates(event);
+
+  points.push(newPoint);
   drawPoints();
 });
 
-function drawPoints() {
+imagePreview.addEventListener("pointermove", (event) => {
+
+  // Change the cursor when hovering over a marker
+  if (activePointerId === null) {
+    imagePreview.style.cursor = findMarker(event) !== -1 ? "grab" : "crosshair";
+
+    return;
+  }
+
+  // Only the active pointer can drag the point
+  if (event.pointerId !== activePointerId) return;
+
+  const newPosition = getImageCoordinates(event);
+
+  points[draggedPoint].x = newPosition.x;
+  points[draggedPoint].y = newPosition.y;
+
+  // Redraw without destroying the coordinate inputs
+  drawPoints(false);
+
+  // Update the existing editable coordinate fields
+  const row = pointList.children[draggedPoint];
+
+  if (row) {
+    const inputs = row.querySelectorAll("input");
+
+    if (inputs.length === 2) {
+      inputs[0].value = newPosition.x;
+      inputs[1].value = newPosition.y;
+    }
+  }
+
+  coordinateResult.textContent =
+    `Dragging ${letters[draggedPoint]}: ` +
+    `X ${newPosition.x}, Y ${newPosition.y}`;
+});
+
+function endDrag(event) {
+
+  if (event.pointerId !== activePointerId) return;
+
+  activePointerId = null;
+  draggedPoint = -1;
+
+  // Release pointer capture if still active
+  if (imagePreview.hasPointerCapture(event.pointerId)) {
+    imagePreview.releasePointerCapture(event.pointerId);
+  }
+
+  imagePreview.style.cursor = "crosshair";
+
+  drawPoints(false);
+}
+
+imagePreview.addEventListener("pointerup", endDrag);
+imagePreview.addEventListener("pointercancel", endDrag);
+imagePreview.addEventListener("lostpointercapture", endDrag);
+
+function drawPoints(rebuildList = true) {
   markerLayer.replaceChildren();
-  pointList.replaceChildren();
+  if (rebuildList) {pointList.replaceChildren();}
 
   // Keep marker labels readable at different screen sizes
   const displayWidth = imagePreview.getBoundingClientRect().width;
@@ -117,13 +223,53 @@ function drawPoints() {
     markerLayer.append(circle, letter);
 
     // Add point to the HTML list
-    const item = document.createElement("li");
-    const label = document.createElement("strong");
+    if (rebuildList) {
+      const item = document.createElement("li");
+      const label = document.createElement("strong");
     
-    label.textContent = `${letters[index]}:`;
-    item.append(label, ` X ${point.x}, Y ${point.y}`);
+      label.textContent = `${letters[index]}:`;
+      item.append(label);
 
-    pointList.append(item);
+      // Create seperate editable X and Y fields
+      for (const axis of ["x","y"]) {
+        const fieldLabel = document.createElement("label");
+        fieldLabel.textContent = axis.toUpperCase() + " ";
+
+        const input = document.createElement("input");
+        const limit = axis === "x"
+          ? imagePreview.naturalWidth : imagePreview.naturalHeight;
+        const extension = limit * 0.5;
+        input.type = "number";
+        input.min = String(-Math.round(extension));
+        input.max = String(Math.round(limit + extension));
+        input.step = "1";
+        input.required = true;
+        input.value = point[axis];
+
+        input.setAttribute("aria-label",
+          `${letters[index]} ${axis.toUpperCase()} coordinate`);
+        input.addEventListener("input", () => {
+          if (!input.validity.valid) return;
+
+          points[index][axis] = Number(input.value);
+
+          // Redraw SVG without replacing the inputs
+          drawPoints(false);
+        });
+
+        // Restore the last valid value if editing ends invalid
+        input.addEventListener("blur", () => {
+          if (!input.validity.valid) {
+            input.value = points[index][axis];
+          }
+        });
+
+        fieldLabel.append(input);
+        item.append(" ", fieldLabel);
+      }
+
+      pointList.append(item);
+    }
   });
 
   // Show polygon only when all four corners exist
@@ -171,4 +317,6 @@ copyButton.addEventListener("click", async () => {
 });
 
 // Keep marker sizes readable after screen rotation
-window.addEventListener("resize", drawPoints);
+window.addEventListener("resize", () => {
+  drawPoints(false);
+});
