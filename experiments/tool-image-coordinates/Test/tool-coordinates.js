@@ -5,10 +5,16 @@ const imageDetails = document.querySelector("#image-details");
 
 const imageRatioButton = document.querySelector("#ratio-image");
 const squareButton = document.querySelector("#ratio-square");
-const appliedRatioButton = document.querySelector("ratio-applied");
 const ratioXInput = document.querySelector("#ratio-x");
 const ratioYInput = document.querySelector("#ratio-y");
 const applyRatioButton = document.querySelector("#ratio-apply");
+const appliedRatioButton = document.querySelector("#ratio-applied");
+
+const fitImageButton = document.querySelector("fit-image");
+const zoomReadout = document.querySelector("#zoom-readout");
+const view = {zoom: 1, panX: 0, panY: 0};
+const MIN_ZOOM = 0.02;
+const MAX_ZOOM = 32;
 
 const workspace = document.querySelector("#workspace-viewport");
 
@@ -29,6 +35,7 @@ const letters = ["A", "B", "C", "D"];
 const svgNS = "http://www.w3.org/2000/svg";
 
 let imageURL = null;
+let lastCustomRatio = null;
 
 function setWorkspaceRatio(x,y) {
   const ratio = x / y;
@@ -41,7 +48,7 @@ function setWorkspaceRatio(x,y) {
   // Change the workspace shape
   workspace.style.aspectRatio = `${x} / ${y}`;
 
-  workspace.style.width = `min(90%, ${70 * ratio}svh`;
+  workspace.style.width = `min(90%, ${70 * ratio}svh)`;
 
   ratioXInput.value = x;
   ratioYInput.value = y;
@@ -58,10 +65,104 @@ squareButton.addEventListener("click", () => {
 });
 
 applyRatioButton.addEventListener("click", () => {
-  setWorkspaceRatio(
-    Number(ratioXInput.value), Number(ratioYInput.value)
-  );
+  const x = Number(ratioXInput.value);
+  const y = Number(ratioYInput.value);
+
+  if (
+    !Number.isFinite(x) || !Number.isFinite(y) ||
+    x <= 0 || y <= 0 || !Number.isFinite(x / y)
+  ) {
+    coordinateResult.textContent = "please enter a valid ratio";
+    return;
+    }
+
+  lastCustomRatio = {x,y};
+
+  appliedRatioButton.disabled = false;
+  
+  setWorkspaceRatio(x,y);
 });
+
+appliedRatioButton.addEventListener("click", () => {
+  if (!lastCustomRatio) return;
+
+  setWorkspaceRatio(lastCustomRatio.x, lastCustomRatio.y);
+});
+
+function applyView() {
+  imageStage.style.transform =
+    `translate(-50%, -50%)` +
+    `translate(${view.panX}px, ${view.panY}px)` +
+    `scale(${view.zoom})`;
+
+  // Display current zoom percentage
+  const percent = view.zoom * 100;
+
+  zoomReadout.textContent = percent < 10
+    ? `${percent.toFixed(1)}%` : `${Math.round(percent)}%`;
+
+  // Redraw markers without rebuilding coordinate fields
+  drawPoints(false);
+}
+
+function fitImage() {
+  if (!imagePreview.naturalWidth) return;
+
+  const availableWidth = workspace.clientWidth;
+  const availableHeight = workspace.clientHeight;
+
+  const imageWidth = imageStage.offsetWidth;
+  const imageHeight = imageStage.offsetHeight;
+
+  if (!imageWidth || !imageHeight) return;
+
+  // Fit the entire image inside the viewport
+  view.zoom = Math.min(
+    availableWidth / imageWidth,
+    availableHeight / imageHeight
+  );
+
+  // Return to image center
+  view.panX = 0;
+  view.panY = 0;
+
+  applyView();
+}
+
+fitImageButton.addEventListener("click", fitImage);
+
+workspace.addEventListener("wheel", (event) => {
+  if (!imagePreview.naturalWidth) return;
+
+  // Prevent the wheel from scrolling the page
+  event.preventDefault();
+
+  // Normalize different wheel delta units
+  const delta = event.deltaY *
+    (event.deltaMode === 1 ? 16 :
+    event.deltaMode === 2 ? workspace.clientHeight : 1)
+
+  // Exponential scaling feels smooth
+  const factor = Math.exp(-delta * 0.001);
+  const oldZoom = view.zoom;
+  const newZoom = Math.max(MIN_ZOOM, Math.min(MAX_ZOOM, oldZoom * factor));
+
+  if (newZoom === oldZoom) return;
+
+  // Cursor position relative to viewport center
+  const rect = workspace.getBoundingClientRect();
+  const anchorX = event.clientX - (rect.left + rect.width / 2);
+  const anchorY = event.clientY - (rect.top + rect.height / 2);
+  const change = newZoom / oldZoom;
+
+  // Preserve the point underneath the cursor
+  view.panX = anchorX - (anchorX - view.panX) * change;
+  view.panY = anchorY - (anchorY - view.panY) * change;
+  view.zoom = newZoom
+
+  applyView();
+  
+}, {passive: false});
 
 imageInput.addEventListener("change", () => {
   const file = imageInput.files[0];
@@ -95,7 +196,14 @@ imageInput.addEventListener("change", () => {
 
     // New image means a new set of points
     points.length = 0;
+
+    // Establish the initial fitted view
+    fitImage();
+
+    // Rebuild the coordinate list
     drawPoints();
+
+    fitImageButton.disabled = false;
 
     imageDetails.textContent = 
       `${file.name} — ` +
