@@ -10,7 +10,7 @@ const ratioYInput = document.querySelector("#ratio-y");
 const applyRatioButton = document.querySelector("#ratio-apply");
 const appliedRatioButton = document.querySelector("#ratio-applied");
 
-const fitImageButton = document.querySelector("fit-image");
+const fitImageButton = document.querySelector("#fit-image");
 const zoomReadout = document.querySelector("#zoom-readout");
 const view = {zoom: 1, panX: 0, panY: 0};
 const MIN_ZOOM = 0.02;
@@ -91,8 +91,8 @@ appliedRatioButton.addEventListener("click", () => {
 
 function applyView() {
   imageStage.style.transform =
-    `translate(-50%, -50%)` +
-    `translate(${view.panX}px, ${view.panY}px)` +
+    `translate(-50%, -50%) ` +
+    `translate(${view.panX}px, ${view.panY}px) ` +
     `scale(${view.zoom})`;
 
   // Display current zoom percentage
