@@ -28,7 +28,7 @@
 /* Image Container */
 #image-stage {
   position: relative;
-  width: fit-content;
+  width: 100%;
   max-width: 100%;
   margin: 1.5rem auto;
 }
@@ -38,11 +38,69 @@
 /* Responsive Image */
 #image-preview {
   display: block;
-  width: auto;
+  width: 100%;
   height: auto;
-  max-width: 100%;
-  max-height: 70dvh;
   outline: 1px solid rgba(0, 255. 204. 0.45);
   cursor: crosshair;
   touch-action: manipulation;
+}
+
+/* SVG drawing layer */
+#point-overlay {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+/* Completed quadrilateral */
+#selected-polygon {
+  fill: rgba(0, 255, 204, 0.15);
+  stroke: #00ffcc;
+  stroke-width: 2;
+  vector-effect: non-scaling-stroke;
+}
+
+/* Numbered / lettered markers */
+#point-markers circle {
+  fill: #ffd166;
+  stroke: #111;
+  stroke-width: 2;
+}
+
+#point-markers text {
+  fill: #ffd166;
+  font-family: sans-serif;
+  font-weight: bold;
+  paint-order: stroke;
+  stroke: #111;
+  stroke-width: 2px;
+}
+
+/* Coordinate listing */
+#point-list {
+  list-style: none;
+  padding: 0;
+}
+
+#point-list li {
+  display: block;
+  margin: 0.4rem 0;
+}
+
+#point-list strong {
+  color: #ffd166;
+  font-weight: bold;
+}
+
+/* Action buttons */
+.tool-actions {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+}
+
+.tool-actions button:disabled {
+  opacity: 0.4
 }
