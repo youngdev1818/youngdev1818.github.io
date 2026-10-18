@@ -147,5 +147,26 @@ clearButton.addEventListener("click", () => {
   drawPoints();
 });
 
+copyButton.addEventListener("click", async () => {
+  if (points.length !== 4) return;
+
+  // Converts points into SVG coordinate format
+  const coordinates = points.map(point => `${point.x},${point.y}`).join(" ");
+
+  // Build the SVG attribute
+  const svgCode = `points="${coordinates}"`;
+
+  // Copy to the device clipboard
+  try{
+    await navigator.clipboard.writeText(svgCode);
+
+    coordinateResult.textContent = "SVG points coppied to clipboard!";
+  } catch (error) {
+    coordinateResult.textContent = "Copy failed. Clipboard permission may be blocked.";
+
+    console.error(error);
+  }
+});
+
 // Keep marker sizes readable after screen rotation
 window.addEventListener("resize", drawPoints);
