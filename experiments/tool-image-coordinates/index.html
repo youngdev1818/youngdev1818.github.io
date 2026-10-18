@@ -17,7 +17,7 @@
 
   <main class="coordinate-tool">
     <h1>Image Coordinates Mapper</h1>
-    <p>Choose an image from your device.  Your image is stored only in your local browser.  Only one image is stored at a time.</p>
+    <p>Your image stays on your device and is never uploaded. Only one image is displayed at a time.</p>
 
     <label for="image-file">Select an image:</label>
     <input type="file" id="image-file" accept="image/">
@@ -26,12 +26,27 @@
 
     <div id="image-stage" hidden>
       <img id="image-preview" alt="Preview of your image">
+      <svg id="point-overlay" aria-hidden="true">
+        <polygon id="selected-polygon"></polygon>
+        <g id="point-markers"></g>
+      </svg>
     </div>
 
     <p id="coordinate-result" role="status">
       Tap or click the image to find its coordinates.
     </p>
-    
+
+    <ul id="point-list" aria-label="Selected coordinates"></ul>
+
+    <div class="tool-actions">
+      <button id="undo-point" type="button" disabled>
+        Undo Last
+      </button>
+
+      <button id="clear-points" type="button" disabled>
+        Clear All
+      </button>
+    </div>
   </main>
   
 </body>
