@@ -20,17 +20,68 @@
     <p>Your image stays on your device and is never uploaded. Only one image is displayed at a time.</p>
 
     <label for="image-file">Select an image:</label>
-    <input type="file" id="image-file" accept="image/">
+    <input type="file" id="image-file" accept="image/*">
 
     <p id="image-details" role="status">No image selected.</p>
 
-    <div id="image-stage" hidden>
-      <img id="image-preview" alt="Preview of your image">
-      <svg id="point-overlay" aria-hidden="true">
-        <polygon id="selected-polygon"></polygon>
-        <g id="point-markers"></g>
-      </svg>
+    <div class="workspace-toolbar">
+      <div class="ratio-controls">
+        <button id="ratio-image" type="button">
+          Default
+        </button>
+
+        <button id="ratio-square" type="button">
+          1:1
+        </button>
+
+        <button id="ratio-applied" type="button">
+          Last Custom
+        </button>
+
+        <label>X
+          <input id="ratio-x" type="number"
+            min="0.01" step="any" value="1">
+        </label>
+        <span>:</span>
+        <label>Y
+          <input id="ratio-y" type="number"
+            min="0.01" step="any" value="1">
+        </label>
+
+        <button id="ratio-apply" type="button">
+          Apply
+        </button>
+      </div>
+
+      <div class="view-controls">
+        <button id="fit-image" type="button" disabled>
+          Fit Image
+        </button>
+
+        <output id="zoom-readout" aria-label="Image zoom">
+          100%
+        </output>
+      </div>
+
+      <button id="fit-polygon" type="button" disabled>
+        Fit Polygon
+      </button>
+
+      <label class="pan-lock">
+        <input id="lock-pan" type="checkbox" checked>
+        Lock Image Pan
+      </label>
     </div>
+
+    <div id="workspace-viewport" role="group" aria-label="Image workspace">
+      <div id="image-stage" hidden>
+        <img id="image-preview" alt="Preview of your image">
+        <svg id="point-overlay" aria-hidden="true">
+          <polygon id="selected-polygon"></polygon>
+          <g id="point-markers"></g>
+        </svg>
+      </div>
+  </div>
 
     <p id="coordinate-result" role="status">
       Tap or click the image to find its coordinates.
