@@ -1,0 +1,122 @@
+/* This page borrows the common navigation and body styles from ../style.css. */
+.about-scene {
+  position: relative; /* Establishes the coordinate system for all overlays. */
+  max-width: 1536px;
+  margin: 0 auto;
+  isolation: isolate;
+}
+
+.about-art {
+  display: block;
+  width: 100%;
+  height: auto; /* Keep the original 1536:1024 image ratio. */
+}
+
+/* Perspective outlines are SVG so their corners follow the image as it scales. */
+.holo-waves {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+.holo-wave {
+  fill: rgba(28, 179, 185, 0.025);
+  stroke: rgba(103, 236, 224, 0.82);
+  stroke-width: 3;
+  vector-effect: non-scaling-stroke;
+  filter: drop-shadow(0 0 6px rgba(56, 220, 216, 0.8));
+  stroke-dasharray: 12 14;
+  opacity: 0.2; /* Prevents delayed waves from flashing at full strength. */
+  animation: hologram-pulse 5.5s ease-in-out infinite;
+}
+
+.wave-one   { animation-delay: 0s; }
+.wave-two   { animation-delay: 1.5s; }
+.wave-three { animation-delay: 3s; }
+
+@keyframes hologram-pulse {
+  0%, 100% { opacity: 0.2; stroke-dashoffset: 35; }
+  45%       { opacity: 0.92; }
+  75%       { opacity: 0.38; stroke-dashoffset: 0; }
+}
+
+/* This text sits within the black rectangle of the original artwork. */
+.about-display {
+  position: absolute;
+  left: 37.9%;
+  top: 6.6%;
+  width: 57.1%;
+  height: 87.2%;
+  padding: 2.5%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 1rem;
+  text-align: center;
+  color: #eafaf7;
+  text-shadow: 0 2px 10px #031513;
+  border: 1px solid rgba(0, 255, 204, 0.3);
+  border-radius: 8px;
+  padding: 10px 20px;
+  background: rgba(0,255,204,0.4);
+}
+
+.about-display .eyebrow {
+  font-size: clamp(0.55rem, 0.9vw, 0.83rem);
+  letter-spacing: 0.18em;
+  color: #82e1d9;
+}
+
+.about-display h1 {
+  font-size: clamp(1.1rem, 2.8vw, 2.85rem);
+  line-height: 1.1;
+  color: #f7f1df;
+}
+
+.about-display p:not(.eyebrow) {
+  font-size: clamp(0.8rem, 1.3vw, 1.15rem);
+  line-height: 1.55;
+}
+
+/* Solid lettering floats above the translucent projection lines. */
+.projection-message {
+  position: absolute;
+  top: 79%;
+  left: 51%;
+  width: 46%;
+  text-align: center;
+  font-size: clamp(0.7rem, 1.5vw, 1.45rem);
+  letter-spacing: 0.09em;
+  color: #edfffb;
+  text-shadow: 0 1px 3px #001416, 0 0 10px #17b8bb;
+}
+
+.projection-message span { color: #d8b773; }
+
+/* Never cram paragraphs into a thumbnail-sized display on phones. */
+@media (max-width: 720px) {
+  .holo-waves {
+    inset: 0 0 auto;
+    height: auto;
+    aspect-ratio: 3 / 2; /* Keep SVG registered to the picture, not the text below. */
+  }
+
+  .about-display {
+    position: static;
+    width: 100%;
+    height: auto;
+    padding: 1.5rem 1.25rem;
+    background: #081716;
+    gap: 0.75rem;
+  }
+
+  .about-display h1 { font-size: 1.75rem; }
+  .about-display p:not(.eyebrow) { font-size: 1rem; }
+  .projection-message { display: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .holo-wave { animation: none; opacity: 0.55; }
+}
