@@ -40,7 +40,7 @@
   display: block;
   width: 100%;
   height: auto;
-  outline: 1px solid rgba(0, 255. 204. 0.45);
+  outline: 1px solid rgba(0, 255, 204, 0.45);
   cursor: crosshair;
   touch-action: none;
 }
@@ -123,7 +123,76 @@
   font-weight: bold;
 }
 
-/* Action buttons */
+#point-overlay {
+  overflow: visible;
+}
+
+/* Top toolbar */
+.workspace-toolbar {
+  width: 90%;
+  margin: 1rem auto 0;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.ratio-controls {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.ratio-controls label {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.ratio-controls input {
+  width: 4.5rem;
+  padding: 0.3rem;
+
+  color: white;
+  background: #111;
+  border: 1px solid #00aa99;
+  border-radius: 4px;
+}
+
+.view-controls {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+#zoom-readout {
+  min-width: 4.5rem;
+  font-variant-numeric: tabular-nums;
+  color: #ffd166;
+}
+
+.pan-lock {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+
+  padding: 0.45rem 0.7rem;
+  border: 1px solid #00aa99;
+  border-radius: 6px;
+  background: #111;
+  cursor: pointer;
+}
+
+.pan-lock input {
+  accent-color: #00ffcc;
+  width: 1.1rem;
+  height: 1.1rem;
+}
+
+/* Bottom action buttons */
 .tool-actions {
   display: flex;
   justify-content: center;
@@ -132,4 +201,44 @@
 
 .tool-actions button:disabled {
   opacity: 0.4
+}
+
+#workspace-viewport {
+  position: relative;
+  width: 90%;
+  height: auto;
+  margin: 1.5rem auto;
+
+  display: grid;
+  place-items: center;
+
+  background-color: #3e4044;
+  background-image:
+    linear-gradient(#505257 1px, transparent 1px),
+    linear-gradient(90deg, #505257 1px, transparent 1px);
+  background-size: 32px 32px;
+
+  border: 1px solid #73767b;
+  border-radius: 8px;
+  box-sizing: border-box;
+
+  overflow: hidden;
+  touch-action: none;
+}
+
+/* Before an image is selected */
+#workspace-viewport:not(.has-image) {
+  min-height: 220px;
+}
+
+/* Center the image indipendently of the viewport */
+#workspace-viewport #image-stage {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  transform-origin: center center;
+
+  max-width: none;
+  margin: 0;
 }
