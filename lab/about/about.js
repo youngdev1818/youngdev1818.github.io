@@ -79,16 +79,23 @@ const waves = Array.from(surfaces, surface => {
     x: p.x, y: p.y
   }));
 
-  const line = document.createElementNS(svgNS, "line");
-  line.classList.add("traveling-line");
-  waveGroup.appendChild(line);
+  const path = document.createElementNS(svgNS, "path");
+  path.classList.add("traveling-line");
+  waveGroup.appendChild(path);
 
   return {
     A: points[0],
     B: points[1],
     C: points[2],
     D: points[3],
-    line
+    path,
+    wavesConfig: {
+      amplitude: 6 + Math.random() * 5,
+      frequency: 1.5 + Math.random() * 1.2,
+      speed: 2.2 + Math.random() * 1.0,
+      phase: Math.random() * Math.PI * 2,
+      segments: 24
+    }
   };
 });
 
@@ -97,15 +104,71 @@ function lerp(start, finish, t) {
   return start + (finish - start) * t;
 }
 
-function drawWaves(t) {
+function buildWavePath(P1, P2, time, options = {}) {
+  const segments = options.segments ?? 24;
+  const amplitude = options.amplitude ?? 8;
+  const frequency = options.frequency ?? 2;
+  const speed = options.speed ?? 1.2;
+  const phase = options.phase ?? 0;
+
+  const dx = P2.x - P1.x;
+  const dy = P2.y - P1.y;
+  const length = Math.hypot(dx, dy);
+
+  if (length === 0) {
+    return `M ${P1.x} ${P1.y} L ${P2.x} ${P2.y}`;
+  }
+
+  // Unit direction along the line
+  const tx = dx / length;
+  const ty = dy / length;
+
+  // Unit perpendicular to the line
+  const nx = -ty;
+  const ny = tx;
+
+  let d = "";
+
+  for (let i = 0; i <= segments; i++) {
+    const u = i / segments;
+
+    // Base point along the line
+    const x = P1.x + dx * u;
+    const y = P1.y + dy * u;
+
+    // Keep endpoints exact
+    let offset = 0;
+
+    if (i !== 0 && i !== segments) {
+      offset = Math.sin((u * frequency * Math.PI * 2) - (time * speed) + phase) * amplitude;
+    }
+
+    const px = x + nx * offset;
+    const py = y + ny * offset;
+
+    d += (i === 0 ? "M" : "L") + `${px} ${py}`;
+  }
+
+  return d;
+}
+
+function drawWaves(t, timeSeconds) {
   for (const wave of waves) {
-    const { A, B, C, D, line } = wave;
+    const { A, B, C, D, path, wavesConfig } = wave;
 
-    line.setAttribute("x1", lerp(D.x, A.x, t));
-    line.setAttribute("y1", lerp(D.y, A.y, t));
+    const P1 = {
+      x: lerp(D.x, A.x, t),
+      y: lerp(D.y, A.y, t)
+    };
 
-    line.setAttribute("x2", lerp(C.x, B.x, t));
-    line.setAttribute("y2", lerp(C.y, B.y, t));
+    const P2 = {
+      x: lerp(C.x, B.x, t),
+      y: lerp(C.y, B.y, t)
+    };
+
+    const d = buildWavePath(P1, P2, timeSeconds, wavesConfig);
+
+    path.setAttribute("d", d);
   }
 }
 
@@ -116,14 +179,16 @@ let startTime;
 function animateWaves(now) {
   if (startTime === undefined) startTime = now;
 
-  const t = ((now-startTime) % duration) / duration;
+  const elapsed = now - startTime;
+  const t = (elapsed % duration) / duration;
+  const timeSeconds = elapsed / 1000;
 
-  drawWaves(t);
+  drawWaves(t, timeSeconds);
   requestAnimationFrame(animateWaves);
 }
 
 if (window.matchMedia("(prefers-reduced-motion:reduce)").matches) {
-  drawWaves(0.5);
+  drawWaves(0.5, 0);
 } else {
   requestAnimationFrame(animateWaves);
 }
