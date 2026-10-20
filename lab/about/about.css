@@ -12,6 +12,13 @@
   height: auto; /* Keep the original 1536:1024 image ratio. */
 }
 
+.holo-face {
+  fill: rgba(0, 100, 105, 0.5);
+  stroke: rgba(103,236,224, 0.3);
+  stroke-width: 2;
+  vector-effect: non-scaling-stroke;
+}
+
 /* Perspective outlines are SVG so their corners follow the image as it scales. */
 .holo-waves {
   position: absolute;
@@ -22,7 +29,7 @@
 }
 
 .holo-wave {
-  fill: rgba(28, 179, 185, 0.025);
+  fill: rgba(28, 179, 185, 0.3);
   stroke: rgba(103, 236, 224, 0.82);
   stroke-width: 3;
   vector-effect: non-scaling-stroke;
@@ -30,6 +37,7 @@
   stroke-dasharray: 12 14;
   opacity: 0.2; /* Prevents delayed waves from flashing at full strength. */
   animation: hologram-pulse 5.5s ease-in-out infinite;
+  z-index: 1;
 }
 
 .wave-one   { animation-delay: 0s; }
@@ -42,25 +50,34 @@
   75%       { opacity: 0.38; stroke-dashoffset: 0; }
 }
 
-/* This text sits within the black rectangle of the original artwork. */
+/* This text sits within the holo-face rectangle. */
 .about-display {
   position: absolute;
-  left: 37.9%;
-  top: 6.6%;
-  width: 57.1%;
-  height: 87.2%;
-  padding: 2.5%;
+  top: 0;
+  left: 0;
+  /* Logical size before perspective distortion */
+  width: 546px;
+  height: 457px;
+  box-sizing: border-box;
+  /* Breathing room around text */
+  padding: 2.75rem 3.5rem;
+  
   display: flex;
   flex-direction: column;
+  align-items: center;
   justify-content: center;
   gap: 1rem;
+  
   text-align: center;
-  color: #eafaf7;
-  text-shadow: 0 2px 10px #031513;
-  border: 1px solid rgba(0, 255, 204, 0.3);
-  border-radius: 8px;
-  padding: 10px 20px;
-  background: rgba(0,255,204,0.4);
+  color: #cccc99;
+  text-shadow: 0 2px 10px #99990085;
+  font-size: clamp(1.1rem, 2.8vw, 2.85rem);
+  /* The SVGface supplies our background */
+  background: transparent;
+  border: none;
+  /* Transform relative to the upper-left corner */
+  transform-origin: 0 0;
+  z-index: 2;
 }
 
 .about-display .eyebrow {
@@ -70,13 +87,13 @@
 }
 
 .about-display h1 {
-  font-size: clamp(1.1rem, 2.8vw, 2.85rem);
+  font-size: clamp(2rem, 2.8vw, 3rem);
   line-height: 1.1;
   color: #f7f1df;
 }
 
 .about-display p:not(.eyebrow) {
-  font-size: clamp(0.8rem, 1.3vw, 1.15rem);
+  font-size: clamp(1.5rem, 2vw, 2.5rem);
   line-height: 1.55;
 }
 
