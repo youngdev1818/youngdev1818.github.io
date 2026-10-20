@@ -13,7 +13,7 @@
 }
 
 .holo-face {
-  fill: rgba(0, 100, 105, 0.5);
+  fill: rgba(0, 100, 105, 0.3);
   stroke: rgba(103,236,224, 0.3);
   stroke-width: 2;
   vector-effect: non-scaling-stroke;
@@ -29,7 +29,7 @@
 }
 
 .holo-wave {
-  fill: rgba(28, 179, 185, 0.3);
+  fill: rgba(28, 179, 185, 0.0);
   stroke: rgba(103, 236, 224, 0.82);
   stroke-width: 3;
   vector-effect: non-scaling-stroke;
@@ -66,7 +66,7 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 1rem;
+  gap: 0.7rem;
   
   text-align: center;
   color: #cccc99;
@@ -92,25 +92,19 @@
   color: #f7f1df;
 }
 
-.about-display p:not(.eyebrow) {
-  font-size: clamp(1.5rem, 2vw, 2.5rem);
-  line-height: 1.55;
-}
-
-/* Solid lettering floats above the translucent projection lines. */
-.projection-message {
-  position: absolute;
-  top: 79%;
-  left: 51%;
-  width: 46%;
-  text-align: center;
-  font-size: clamp(0.7rem, 1.5vw, 1.45rem);
+.about-display h2 {
+  font-size: clamp(0.7rem, 1.2vw, 1.45rem);
   letter-spacing: 0.09em;
   color: #edfffb;
   text-shadow: 0 1px 3px #001416, 0 0 10px #17b8bb;
 }
 
-.projection-message span { color: #d8b773; }
+.about-display h2 span { color: #d8b773}
+
+.about-display p:not(.eyebrow) {
+  font-size: clamp(1.2rem, 1.5vw, 2rem);
+  line-height: 1.55;
+}
 
 /* Never cram paragraphs into a thumbnail-sized display on phones. */
 @media (max-width: 720px) {
@@ -131,7 +125,6 @@
 
   .about-display h1 { font-size: 1.75rem; }
   .about-display p:not(.eyebrow) { font-size: 1rem; }
-  .projection-message { display: none; }
 }
 
 @media (prefers-reduced-motion: reduce) {
