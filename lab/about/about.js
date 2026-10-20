@@ -66,3 +66,64 @@ image.addEventListener("load", positionAboutText)
 
 // Initial positioning.
 positionAboutText();
+
+// Traveling lines.
+const surfaces = document.querySelectorAll(".holo-wave");
+const waveGroup = document.querySelector(".traveling-lines");
+
+const svgNS = "http://www.w3.org/2000/svg";
+
+// One line for each for trapazoids.
+const waves = Array.from(surfaces, surface => {
+  const points = Array.from(surface.points, p => ({
+    x: p.x, y: p.y
+  }));
+
+  const line = document.createElementNS(svgNS, "line");
+  line.classList.add("traveling-line");
+  waveGroup.appendChild(line);
+
+  return {
+    A: points[0],
+    B: points[1],
+    C: points[2],
+    D: points[3],
+    line
+  };
+});
+
+// Linear interpolation: start -> finish
+function lerp(start, finish, t) {
+  return start + (finish - start) * t;
+}
+
+function drawWaves(t) {
+  for (const wave of waves) {
+    const { A, B, C, D, line } = wave;
+
+    line.setAttribute("x1", lerp(D.x, A.x, t));
+    line.setAttribute("y1", lerp(D.y, A.y, t));
+
+    line.setAttribute("x2", lerp(C.x, B.x, t));
+    line.setAttribute("y2", lerp(C.y, B.y, t));
+  }
+}
+
+// Five seconds to travel from AB to DC.
+const duration = 5000;
+let startTime;
+
+function animateWaves(now) {
+  if (startTime === undefined) startTime = now;
+
+  const t = ((now-startTime) % duration) / duration;
+
+  drawWaves(t);
+  requestAnimationFrame(animateWaves);
+}
+
+if (window.matchMedia("(prefers-reduced-motion:reduce)").matches) {
+  drawWaves(0.5);
+} else {
+  requestAnimationFrame(animateWaves);
+}
