@@ -12,42 +12,8 @@
   height: auto; /* Keep the original 1536:1024 image ratio. */
 }
 
-.holo-face {
-  fill: rgba(0, 100, 105, 0.3);
-  stroke: rgba(103,236,224, 0.3);
-  stroke-width: 2;
-  vector-effect: non-scaling-stroke;
-}
-
-/* Perspective outlines are SVG so their corners follow the image as it scales. */
-.holo-waves {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  pointer-events: none;
-}
-
-.holo-wave {
-  fill: rgba(28, 179, 185, 0.0);
-  stroke: rgba(103, 236, 224, 0.82);
-  stroke-width: 3;
-  vector-effect: non-scaling-stroke;
-  filter: drop-shadow(0 0 6px rgba(56, 220, 216, 0.8));
-  stroke-dasharray: 12 14;
-  opacity: 0.2; /* Prevents delayed waves from flashing at full strength. */
-  animation: hologram-pulse 5.5s ease-in-out infinite;
-  z-index: 1;
-}
-
-.wave-one   { animation-delay: 0s; }
-.wave-two   { animation-delay: 1.5s; }
-.wave-three { animation-delay: 3s; }
-
-@keyframes hologram-pulse {
-  0%, 100% { opacity: 0.2; stroke-dashoffset: 35; }
-  45%       { opacity: 0.92; }
-  75%       { opacity: 0.38; stroke-dashoffset: 0; }
+.about-display > * {
+  margin: 0;
 }
 
 /* This text sits within the holo-face rectangle. */
@@ -104,6 +70,58 @@
 .about-display p:not(.eyebrow) {
   font-size: clamp(1.2rem, 1.5vw, 2rem);
   line-height: 1.55;
+}
+
+.holo-face {
+  fill: rgba(0, 100, 105, 0.3);
+  stroke: rgba(103,236,224, 0.3);
+  stroke-width: 2;
+  vector-effect: non-scaling-stroke;
+}
+
+/* Perspective outlines are SVG so their corners follow the image as it scales. */
+.holo-waves {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+.holo-wave {
+  fill: rgba(28, 179, 185, 0.0);
+  stroke: rgba(103, 236, 224, 0.82);
+  stroke-width: 3;
+  vector-effect: non-scaling-stroke;
+  filter: drop-shadow(0 0 6px rgba(56, 220, 216, 0.8));
+  stroke-dasharray: 12 14;
+  opacity: 0.2; /* Prevents delayed waves from flashing at full strength. */
+  animation: hologram-pulse 5.5s ease-in-out infinite;
+  z-index: 1;
+}
+
+.wave-one   { animation-delay: 0s; }
+.wave-two   { animation-delay: 1.5s; }
+.wave-three { animation-delay: 3s; }
+
+@keyframes hologram-pulse {
+  0%, 100% { opacity: 0.2; stroke-dashoffset: 35; }
+  45%       { opacity: 0.92; }
+  75%       { opacity: 0.38; stroke-dashoffset: 0; }
+}
+
+.holo-wave {
+  animation: none;
+  stroke-dasharray: none;
+}
+
+.traveling-line {
+  stroke: #56f5e3;
+  stroke-width: 3;
+  stroke-linecap: round;
+  fill: none;
+  vector-effect: non-scaling-stroke;
+  filter: drop-shadow(0 0 5px #28daca);
 }
 
 /* Never cram paragraphs into a thumbnail-sized display on phones. */
