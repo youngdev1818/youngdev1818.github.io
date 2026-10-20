@@ -71,7 +71,7 @@
   text-align: center;
   color: #cccc99;
   text-shadow: 0 2px 10px #99990085;
-  font-size: clamp(1.2rem, 1.5vw, 2rem);
+  font-size: clamp(1.1rem, 2.8vw, 2.85rem);
   /* The SVGface supplies our background */
   background: transparent;
   border: none;
