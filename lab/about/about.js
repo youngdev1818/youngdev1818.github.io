@@ -151,7 +151,7 @@ function createGradient(id) {
   const stops = Array.from({ length: 13 }, (_, i) => {
     const element = document.createElementNS(svgNS, "stop");
     element.setAttribute("offset", `${i / 12 * 100}%`);
-    element.setAttribute("stop-color", "#56f5e3");
+    element.setAttribute("stop-color", "#4baaa6");
     gradient.appendChild(element);
     return { element, u: i / 12, phase: rand(-0.5, 0.5) };
   });
