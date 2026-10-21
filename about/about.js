@@ -265,7 +265,7 @@ function animateProjector(now) {
 
   while (now >= nextSpawnAt) {
     spawnPulse(nextSpawnAt);
-    nextSpawnAt += rand(180, 220);
+    nextSpawnAt += rand(250, 300);
   }
 
   cleanupPulses(now);
