@@ -74,7 +74,7 @@
 
 /* Holographic projector startup */
 .about-scene {
-  --projection-fade-duration: 5s;
+  --projection-fade-duration: 2s;
 }
 
 .holo-face, .about-display {
