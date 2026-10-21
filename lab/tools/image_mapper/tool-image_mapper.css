@@ -1,0 +1,88 @@
+/* The Image Mapper keeps its styles scoped so the rest of Young Dev is unchanged. */
+.coordinate-tool { max-width: 1450px; margin: 2rem auto; padding: 0 1rem 3rem; text-align: center; }
+.coordinate-tool h1 { color: #00ffcc; font-size: clamp(1.4rem, 4vw, 2rem); }
+.coordinate-tool h2 { font-size: 1.08rem; color: #baffed; margin: 0.45rem 0 0.8rem; }
+.coordinate-tool p { line-height: 1.5; }
+.coordinate-tool button { cursor: pointer; }
+.coordinate-tool button:disabled { opacity: .4; cursor: not-allowed; }
+.file-controls, .workspace-toolbar, .ratio-controls, .view-controls, .tool-actions, .coordinate-header {
+  display: flex; justify-content: center; align-items: center; flex-wrap: wrap; gap: .65rem;
+}
+.file-controls { margin: 1rem auto; }
+.file-controls label { display: flex; flex-wrap: wrap; align-items: center; gap: .65rem; }
+#image-file { max-width: 240px; }
+#image-details { overflow-wrap: anywhere; }
+.workspace-toolbar { justify-content: space-between; margin: 1rem auto; }
+.ratio-controls label, .view-controls label { display: inline-flex; align-items: center; gap: .3rem; }
+.ratio-controls input { width: 4.5rem; }
+.coordinate-tool input[type="number"], .coordinate-tool textarea {
+  padding: .45rem; color: #fff; background: #111; border: 1px solid #00aa99; border-radius: 5px; font: inherit;
+}
+.coordinate-tool input:focus-visible, .coordinate-tool button:focus-visible, .coordinate-tool textarea:focus-visible {
+  outline: 2px solid #ffd166; outline-offset: 3px;
+}
+.coordinate-tool input:invalid { border-color: #ff7777; }
+#zoom-readout { min-width: 4.5rem; color: #ffd166; font-variant-numeric: tabular-nums; }
+.pan-lock { padding: .45rem .7rem; background: #111; border: 1px solid #00aa99; border-radius: 6px; cursor: pointer; }
+.coordinate-tool input[type="checkbox"], .coordinate-tool input[type="radio"] { accent-color: #00ffcc; }
+.editor-layout { display: grid; grid-template-columns: minmax(0, 1fr) 260px; align-items: start; gap: 1rem; }
+.canvas-panel { min-width: 0; }
+#workspace-viewport {
+  position: relative; width: 100%; min-width: 0; height: auto; margin: 0 auto 1rem;
+  display: grid; place-items: center; box-sizing: border-box;
+  background-color: #3e4044;
+  background-image: linear-gradient(#505257 1px, transparent 1px), linear-gradient(90deg, #505257 1px, transparent 1px);
+  background-size: 32px 32px; border: 1px solid #73767b; border-radius: 8px;
+  overflow: hidden; touch-action: none;
+}
+#workspace-viewport:not(.has-image) { min-height: 230px; }
+#workspace-viewport #image-stage {
+  position: absolute; left: 50%; top: 50%; max-width: none; margin: 0;
+  transform: translate(-50%, -50%); transform-origin: center center;
+}
+#image-stage[hidden] { display: none; }
+#image-preview { display: block; width: 100%; height: auto; outline: 1px solid #00ffcc73; cursor: crosshair; touch-action: none; user-select: none; }
+#point-overlay { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; pointer-events: none; }
+#polygon-layer polygon, #polygon-layer polyline { vector-effect: non-scaling-stroke; stroke-linejoin: round; stroke-linecap: round; }
+#polygon-numbers circle { stroke: #111; stroke-width: 2px; }
+#polygon-numbers text { font-weight: bold; text-anchor: middle; dominant-baseline: central; fill: #fff; paint-order: stroke; stroke: #111; stroke-width: 2px; }
+#point-markers circle { fill: #ffd166; stroke: #111; stroke-width: 2px; }
+#point-markers text { fill: #ffd166; font-family: sans-serif; font-weight: bold; paint-order: stroke; stroke: #111; stroke-width: 2px; }
+.tool-actions { margin: 1rem auto; }
+#add-point.armed { background: #087c66; outline: 2px solid #ffd166; }
+.coordinate-header { justify-content: space-between; margin: 1.35rem auto .5rem; }
+.pill-options { display: inline-flex; flex-wrap: wrap; gap: .4rem; border: 0; padding: 0; margin: 0; }
+.pill-options label { display: inline-flex; align-items: center; gap: .35rem; padding: .38rem .65rem; border: 1px solid #00aa99; border-radius: 100px; cursor: pointer; }
+.pill-options label:has(input:checked) { background: #075e50; border-color: #00ffcc; }
+#point-list { padding: 0; list-style: none; max-height: 360px; overflow-y: auto; }
+#point-list li { display: flex; justify-content: center; flex-wrap: wrap; align-items: center; gap: .75rem; margin: .6rem auto; }
+#point-list label { display: inline-flex; align-items: center; gap: .3rem; }
+#point-list input { width: 6.5rem; }
+#point-list strong { color: #ffd166; }
+.export-label { display: block; text-align: left; margin: .85rem 0 .4rem; color: #baffed; }
+#coordinate-code { width: 100%; min-height: 5rem; box-sizing: border-box; resize: vertical; text-align: left; }
+.polygon-panel { text-align: left; padding: 1rem; background: #111b1c; border: 1px solid #285c55; border-radius: 9px; }
+.panel-tip { font-size: .83rem; opacity: .84; line-height: 1.5; }
+#polygon-list { padding: 0; margin: 1rem 0; list-style: none; max-height: 420px; overflow-y: auto; }
+.polygon-row { display: flex; align-items: center; gap: .4rem; margin: .4rem 0; padding: .35rem; border: 1px solid #345b57; border-radius: 6px; }
+.polygon-row.active { border-color: #ffd166; background: #243633; }
+.polygon-select { flex: 1; min-width: 0; display: flex; align-items: center; gap: .45rem; text-align: left; background: transparent; color: white; border: 0; padding: .3rem 0; }
+.polygon-select .layer-text { display: flex; flex-direction: column; gap: .1rem; min-width: 0; }
+.polygon-select small { opacity: .72; }
+.layer-swatch { width: 20px; height: 20px; border-radius: 50%; border: 1px solid white; flex: none; }
+.layer-visible { display: inline-flex; align-items: center; cursor: pointer; }
+.layer-delete { padding: .28rem .45rem; }
+#add-polygon { width: 100%; padding: .65rem; }
+.panel-divider { border-top: 1px solid #345b57; margin: 1.15rem 0; }
+.check-row, .setting-row { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: .5rem; margin: .9rem 0; }
+.setting-row input[type="range"] { flex: 1; min-width: 100px; }
+.setting-row input[type="color"] { width: 3.5rem; height: 2rem; border: 1px solid #00aa99; padding: 1px; background: #111; cursor: pointer; }
+.setting-row output { min-width: 3rem; color: #ffd166; text-align: right; font-variant-numeric: tabular-nums; }
+#save-status { overflow-wrap: anywhere; }
+@media (max-width: 900px) {
+  .editor-layout { grid-template-columns: minmax(0,1fr); }
+  .polygon-panel { max-width: none; }
+  .workspace-toolbar, .coordinate-header { justify-content: center; }
+  #point-list input { width: 5.8rem; }
+}
+@media (max-width: 430px) { .coordinate-tool { padding: 0 .6rem 2rem; } .file-controls { flex-direction: column; } .tool-actions { gap: .35rem; } }
