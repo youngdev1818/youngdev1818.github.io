@@ -86,10 +86,10 @@
 
 @keyframes projection-materialize {
   0% { opacity: 0; }
-  40% { opacity: 0.05; }
-  55% { opacity: 0.10; }
-  70% { opacity: 0.20; }
-  85% { opacity: 0.60; }
+  60% { opacity: 0.00; }
+  70% { opacity: 0.10; }
+  80% { opacity: 0.20; }
+  90% { opacity: 0.60; }
   100% { opacity: 1; }
 }
 
