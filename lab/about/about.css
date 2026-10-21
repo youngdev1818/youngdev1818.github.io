@@ -72,6 +72,27 @@
   line-height: 1.55;
 }
 
+/* Holographic projector startup */
+.about-scene {
+  --projection-fade-duration: 5s;
+}
+
+.holo-face, .about-display {
+  animation: projection-materialize
+    var(--projection-fade-duration)
+    ease-in-out
+    both;
+}
+
+@keyframes projection-materialize {
+  0% { opacity: 0; }
+  40% { opacity: 0.05; }
+  55% { opacity: 0.10; }
+  70% { opacity: 0.20; }
+  85% { opacity: 0.55; }
+  100% { opacity: 1; }
+}
+
 .holo-face {
   fill: rgba(0, 100, 105, 0.3);
   stroke: rgba(103,236,224, 0.0);
@@ -134,4 +155,11 @@
 
   .about-display h1 { font-size: 1.75rem; }
   .about-display p:not(.eyebrow) { font-size: 1rem; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .holo-face, .about-display {
+    animation: none;
+    opacity: 1;
+  }
 }
