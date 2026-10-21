@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport"
+    content="width=device-width, initial-scale=1.0">
+  <title>Matrix | Young Dev</title>
+  
+  <style>
+    html, body {
+      margin: 0;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      background: #000000;
+    }
+
+    /* All three layers fill the screen */
+    #matrix-far,
+    #matrix-mid,
+    #matrix-rain {
+      position: fixed;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      background: transparent;
+    }
+
+    #matrix-far {z-index: 1;}
+    #matrix-far {z-index: 2;}
+    #matrix-far {z-index: 3;}
+
+    /* Navigation floats above the rain */
+    .matrix-nav {
+      position: fixed;
+      top: 16px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 10;
+      display: flex;
+      gap: 14px;
+    }
+
+    .matrix-nav a {
+      color: #73f5d5;
+      text-decoration: none;
+      background: rgba(0, 255, 204, 0.15);
+      border: 1px solid rgba(0, 255, 204, 0.8);
+      border-radius: 10px;
+      padding: 12px 20px;
+    }
+  </style>    
+</head>
+
+<body>
+
+  <canvas id="matrix-far"></canvas>
+  <canvas id="matrix-mid"></canvas>
+  <canvas id="matrix-rain"></canvas>
+
+  <nav class="matrix-nav" aria-label="Main Navigation">
+    <a href="../">Home</a>
+  </nav>
+
+  <script src="matrix-layers.js"></script>
+  
+</body>
+</html>
