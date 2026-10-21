@@ -94,7 +94,7 @@ if (!definitions) {
 }
 
 const activePulses = [];
-const travelDuration = 5000;  // 5 seconds from inner to outer edges
+const travelDuration = 2000;  // 5 seconds from inner to outer edges
 let nextSpawnAt;
 let pulseNumber = 0;
 
