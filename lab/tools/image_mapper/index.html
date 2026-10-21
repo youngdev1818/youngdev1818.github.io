@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Image Coordinate Mapper | Young Dev</title>
+  <link rel="stylesheet" href="../../../style.css">
+  <link rel="stylesheet" href="tool-image_mapper.css">
+  <script src="tool-image_mapper.js" defer></script>
+</head>
+<body>
+  <nav class="main-nav">
+    <a href="../../../">Home</a>
+    <a href="../../">Lab</a>
+    <a href="../">Toolbox</a>
+  </nav>
+
+  <main class="coordinate-tool">
+    <h1>Image Coordinates Mapper</h1>
+    <p>All editing stays on your device. Your last image and edits can be restored in this browser.</p>
+
+    <div class="file-controls">
+      <label for="image-file">Select an image:
+        <input type="file" id="image-file" accept="image/*">
+      </label>
+      <button id="load-project" type="button">Open Project JSON</button>
+      <input id="project-file" type="file" accept=".json,application/json" hidden>
+      <button id="save-project" type="button" disabled>Save Project JSON</button>
+    </div>
+    <p id="image-details" role="status">No image selected.</p>
+
+    <div class="workspace-toolbar">
+      <div class="ratio-controls">
+        <button id="ratio-image" type="button">Default</button>
+        <button id="ratio-square" type="button">1:1</button>
+        <button id="ratio-applied" type="button" disabled>Last Custom</button>
+        <label>X <input id="ratio-x" type="number" min="0.01" step="any" value="1"></label>
+        <span>:</span>
+        <label>Y <input id="ratio-y" type="number" min="0.01" step="any" value="1"></label>
+        <button id="ratio-apply" type="button">Apply</button>
+      </div>
+      <div class="view-controls">
+        <button id="fit-image" type="button" disabled>Fit Image</button>
+        <button id="fit-polygon" type="button" disabled>Fit Polygon</button>
+        <output id="zoom-readout" aria-label="Image zoom">100%</output>
+        <label class="pan-lock"><input id="lock-pan" type="checkbox"> Lock Image Pan</label>
+      </div>
+    </div>
+
+    <div class="editor-layout">
+      <section class="canvas-panel" aria-label="Image editing canvas">
+        <div id="workspace-viewport" role="group" aria-label="Image workspace">
+          <div id="image-stage" hidden>
+            <img id="image-preview" alt="Preview of your selected image" draggable="false">
+            <svg id="point-overlay" aria-hidden="true">
+              <defs id="gradient-definitions"></defs>
+              <g id="polygon-layer"></g>
+              <g id="polygon-numbers"></g>
+              <g id="point-markers"></g>
+            </svg>
+          </div>
+        </div>
+        <p id="coordinate-result" role="status">Tap the image to place corners A–D. Add Point extends a polygon up to Z.</p>
+        <div class="tool-actions">
+          <button id="undo-point" type="button" disabled>Undo Last Edit</button>
+          <button id="add-point" type="button" disabled>Add Point</button>
+          <button id="remove-point" type="button" disabled>Remove Last Point</button>
+          <button id="clear-points" type="button" disabled>Clear Polygon</button>
+        </div>
+        <div class="coordinate-header">
+          <h2>Vertex Coordinates</h2>
+          <fieldset class="pill-options" aria-label="Coordinate output format">
+            <label><input type="radio" name="coordinate-mode" value="svg" checked> SVG px</label>
+            <label><input type="radio" name="coordinate-mode" value="percent"> CSS %</label>
+          </fieldset>
+        </div>
+        <ul id="point-list" aria-label="Editable coordinates of the active polygon"></ul>
+        <label class="export-label" for="coordinate-code">Coordinate output</label>
+        <textarea id="coordinate-code" readonly rows="3" spellcheck="false"></textarea>
+        <div class="tool-actions export-actions">
+          <button id="copy-svg" type="button" disabled>Copy Coordinates</button>
+          <button id="copy-overlay" type="button" disabled>Copy SVG Overlay</button>
+          <button id="save-view" type="button" disabled>Save View PNG</button>
+        </div>
+      </section>
+
+      <aside class="polygon-panel" aria-label="Polygon editing panel">
+        <h2>Polygons</h2>
+        <p class="panel-tip">Select a polygon to edit. The eye checkbox controls visibility; all visible polygons remain on the image.</p>
+        <ul id="polygon-list" aria-label="Polygon layers"></ul>
+        <button id="add-polygon" type="button" disabled>+ Add Polygon</button>
+        <div class="panel-divider"></div>
+        <h2>Selected Fill</h2>
+        <label class="check-row"><input id="gradient-enabled" type="checkbox" disabled> Use linear gradient</label>
+        <label class="setting-row">Color A <input id="fill-color" type="color" value="#00ffcc" disabled></label>
+        <label class="setting-row">Color B <input id="fill-color-b" type="color" value="#57aaff" disabled></label>
+        <label class="setting-row">Gradient angle
+          <input id="gradient-angle" type="range" min="0" max="360" value="0" disabled>
+          <output id="gradient-angle-value">0°</output>
+        </label>
+        <label class="setting-row">Fill opacity
+          <input id="fill-opacity" type="range" min="0" max="100" value="18" disabled>
+          <output id="fill-opacity-value">18%</output>
+        </label>
+        <p id="save-status" class="panel-tip" role="status">Select an image to begin.</p>
+      </aside>
+    </div>
+  </main>
+</body>
+</html>
