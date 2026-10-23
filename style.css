@@ -5,6 +5,73 @@
   box-sizing: border-box;
 }
 
+body.home-page { background: #000; }
+
+body.home-page {
+  --pyramid-lift: clamp(20px, 5vh, 60px);
+  --scene-fade: clamp(12px, 2.6vw, 40px);
+}
+
+body.home-page::before {
+  content: "";
+  position: fixed;
+
+  /* Center the image and lift it upward */
+  inset: auto;
+  left: 50%;
+  top: calc(50% - var(--pyramid-lift));
+  transform: translate(-50%, -50%);
+
+  /* Match the image proportions */
+  width: min(100%, 1536px);
+  height: auto;
+  aspect-ratio: 1536 / 515;
+
+  /* Image URL */
+  background-image: url("home/dev_temple.webp");
+  background-size: 100% 100%;
+  background-position: center;
+  background-repeat: no-repeat;
+
+  -webkit-mask-image: linear-gradient(
+    to bottom,
+    transparent 0%,
+    black var(--scene-fade),
+    black calc(100% - var(--scene-fade)),
+    transparent 100%
+  );
+
+  mask-image: linear-gradient(
+    to bottom,
+    transparent 0%,
+    black var(--scene-fade),
+    black calc(100% - var(scene-fade)),
+    transparent 100%
+  );
+
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Place the main content above the background */
+body.home-page header,
+body.home-page nav,
+body.home-page main {
+  position: relative;
+  z-index: 1;
+  background: transparent;
+}
+
+/* Opaque sections conceal the fixed background */
+body.home-page .hero,
+body.home-page .hero-title,
+body.home-page .main-nav,
+body.home-page .projects-section,
+body.home-page .about-scene,
+body.home-page .contact-scene {
+  background-color: #000;
+}
+
 body {
   background-color: #000000;
   color: #ffffff;
@@ -62,6 +129,46 @@ body {
 
 .main-nav a:hover{
   background-color: rgba(0, 255, 204, 0.15);
+}
+
+.reveal-gap {
+  --fade-size: clamp(12px, 2.6vw, 40px);
+  
+  position: relative;
+  width: 100%;
+  max-width: 1536px;
+  aspect-ratio: 1536/600;
+  margin: 0 auto;
+  background: linear-gradient(
+    to bottom, #000 0%,
+    transparent var(--fade-size),
+    transparent calc(100% - var(--fade-size)),
+    #000 100%
+  );
+}
+
+/* Gradient overlays */
+.about-scene::after,
+.contact-scene::before {
+  content:"";
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: var(--scene-fade);
+  z-index: 10;
+  pointer-events: none;
+}
+
+/* About: image fades down into black */
+.about-scene::after {
+  bottom: 0;
+  background: linear-gradient(to bottom, transparent, #000);
+}
+
+/* Contact: image fades up from black */
+.contact-scene::before {
+  top: 0;
+  background: linear-gradient(to bottom, #000, transparent);
 }
 
 /* Matrix Portal Section */
