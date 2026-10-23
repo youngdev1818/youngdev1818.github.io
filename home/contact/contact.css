@@ -1,1 +1,53 @@
+.contact-scene {
+  position: relative; /* Establishes the coordinate system for all overlays. */
+  max-width: 1536px;
+  margin: 0 auto;
+  isolation: isolate;
+  overflow: clip;
+}
 
+.contact-art {
+  display: block;
+  width: 100%;
+  height: auto; /* Keep the original 1536:748 image ratio. */
+}
+
+/* SVG aligned to the original image dimensions */
+.contact-svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+/* The holographic viewport */
+.contact-panel {
+  fill: #001c2440;
+  stroke: #56e9eb;
+  stroke-width: 2;
+  filter: drop-shadow(0 0 8px #56e9eb);
+}
+
+/* HTML content inside the display */
+.contact-content {
+  position: absolute;
+  left: 26%;
+  top: 25%;
+  width: 48%;
+  height: 32%;
+  box-sizing: border-box;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+
+  color: #d8ffff;
+  text-shadow: 0 0 10px #00eaff;;
+}
+
+.contact-content h2 { font-size: clamp(0.9rem, 2.2vw, 2rem); }
+
+.contact-content p { font-size: clamp(0.7rem, 1.4vw, 1.2rem); }
