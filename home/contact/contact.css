@@ -44,10 +44,51 @@
   align-items: center;
   text-align: center;
 
-  color: #d8ffff;
+  color: #d6b56e;
   text-shadow: 0 0 10px #00eaff;;
 }
 
 .contact-content h2 { font-size: clamp(0.9rem, 2.2vw, 2rem); }
 
 .contact-content p { font-size: clamp(0.7rem, 1.4vw, 1.2rem); }
+
+
+/* Email Button */
+.contact-content .contact-link,
+.contact-content .contact-link:visited {
+  display: inline-block;
+  margin-top: clamp(0.75rem, 2vw, 2.5rem);
+  padding: 0.3rem 0.6rem;
+  
+
+  color: #d6b56e;
+  font-size: clamp(0.5rem, 1.4vw, 1.1rem);
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  text-decoration: none;
+
+  background: #001c2480;
+  border: 1px solid #d6b56e99;
+  border-radius: 6px;
+
+  text-shadow: #000000ff;
+  box-shadow: 0 0 10px #56e9eb;
+
+  transition:
+    color 0.3s ease,
+    background 0.3s ease,
+    box-shadow 0.3s ease;
+}
+
+.contact-content .contact-link:hover,
+.contact-content .contact-link:focus-visible {
+  color: #d6b56edd;
+  background: #00335599;
+  box-shadow: 0 0 15px #00eaff99;
+  border-color: #d6b56e99;
+}
+
+.contact-content .contact-link:focus-visible {
+  outline: 2px solid #d6b56e99;
+  outline-offset: 2px;
+}
