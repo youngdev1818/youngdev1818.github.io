@@ -290,5 +290,5 @@ if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
   spawnPulse(-travelDuration / 2);
   updatePulse(activePulses[0], 0);
 } else {
-  ;
+  requestAnimationFrame(animateProjector);
 }
