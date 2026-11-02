@@ -260,7 +260,7 @@ function cleanupPulses(now) {
 const targetFPS = 30;
 
 const frameInterval = 1000 / targetFPS;
-let lastFrame = 0;
+let lastFrameTime = 0;
 
 function animateProjector(now) {
 
