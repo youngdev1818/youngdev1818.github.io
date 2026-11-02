@@ -267,7 +267,7 @@ function animateProjector(now) {
   requestAnimationFrame(animateProjector);
 
   // Dont updtate the SVG more than 30 times per second.
-  if (now - lastFrameTime > frameInterval) {
+  if (now - lastFrameTime < frameInterval) {
     return;
   }
   
