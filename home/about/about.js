@@ -128,8 +128,10 @@ function buildWavePath(P1, P2, ageSeconds, config) {
   const ny = dx / length;
   const commands = [];
 
-  for (let i = 0; i <= 28; i++) {
-    const u = i / 28;
+  const segments = 12;
+
+  for (let i = 0; i <= segments; i++) {
+    const u = i / segments;
     const taper = Math.sin(Math.PI * u);
     const wave = Math.sin(
       u * config.frequency * Math.PI * 2
