@@ -95,7 +95,7 @@ if (!definitions) {
 
 const activePulses = [];
 const travelDuration = 5000;  // 5 seconds from inner to outer edges
-let nextSpawnAt;
+let nextSpawnAt = 0;
 let pulseNumber = 0;
 
 function rand(min, max) {
@@ -279,6 +279,9 @@ function animateProjector(now) {
 
   while (now >= nextSpawnAt) {
     spawnPulse(now);
+
+    // Schedule next pulse spawn.
+    nextSpawnAt = now + rand(400, 600);
   }
 
   activePulses.forEach(pulse => updatePulse(pulse, now));
