@@ -257,22 +257,32 @@ function cleanupPulses(now) {
   }
 }
 
-function animateProjector(now) {
-  if (nextSpawnAt === undefined) nextSpawnAt = now;
+const targetFPS = 30;
 
-  // A backgrounded tab can jump several seconds; skip expired launches.
-  if (now - nextSpawnAt > travelDuration) {
-    nextSpawnAt = now - travelDuration;
+const frameInterval = 1000 / targetFPS;
+let lastFrame = 0;
+
+function animateProjector(now) {
+
+  requestAnimationFrame(animateProjector);
+
+  // Dont updtate the SVG more than 30 times per second.
+  if (now - lastFrameTime > frameInterval) {
+    return;
+  }
+  
+  lastFrameTime = now;
+
+  if (nextSpawnAt === 0) {
+    nextSpawnAt = now;
   }
 
   while (now >= nextSpawnAt) {
-    spawnPulse(nextSpawnAt);
-    nextSpawnAt += rand(400, 600);
+    spawnPulse(now);
   }
 
-  cleanupPulses(now);
   activePulses.forEach(pulse => updatePulse(pulse, now));
-  requestAnimationFrame(animateProjector);
+  cleanupPulses(now);
 }
 
 if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
@@ -280,5 +290,5 @@ if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
   spawnPulse(-travelDuration / 2);
   updatePulse(activePulses[0], 0);
 } else {
-  requestAnimationFrame(animateProjector);
+  ;
 }
