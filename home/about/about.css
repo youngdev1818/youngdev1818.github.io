@@ -137,12 +137,12 @@
     drop-shadow(0 0 9px rgba(180, 180, 255, 0.55));
 }
 
-/* Never cram paragraphs into a thumbnail-sized display on phones. */
+/* Never cram paragraphs into a thumbnail-sized display on phones. 
 @media (max-width: 720px) {
   .holo-waves {
     inset: 0 0 auto;
     height: auto;
-    aspect-ratio: 3 / 2; /* Keep SVG registered to the picture, not the text below. */
+    aspect-ratio: 3 / 2; /* Keep SVG registered to the picture, not the text below.
   }
 
   .about-display {
@@ -156,7 +156,7 @@
 
   .about-display h1 { font-size: 1.75rem; }
   .about-display p:not(.eyebrow) { font-size: 1rem; }
-}
+} */
 
 @media (prefers-reduced-motion: reduce) {
   .holo-face, .about-display {
