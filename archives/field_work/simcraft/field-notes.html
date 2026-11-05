@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#080d12">
+  <meta name="description" content="Technical field notes from Young Dev's SimCraft simulator revival, from a missing POWER SW lead to three aligned monitors.">
+  <title>Operator's Field Notes | SimCraft · Young Dev</title>
+  <link rel="icon" type="image/svg+xml" href="assets/sc-mark.svg">
+  <link rel="stylesheet" href="../../style.css?v=2">
+  <link rel="stylesheet" href="simcraft.css?v=1">
+  <script src="simcraft.js" defer></script>
+</head>
+<body class="sc-page sc-notes-page">
+  <div class="sc-reading-progress" aria-hidden="true"><span id="sc-reading-progress"></span></div>
+  <a class="sc-skip" href="#notes">Skip to engineering notes</a>
+  <header class="sc-sitebar"><a class="sc-brand" href="../" aria-label="Return to Young Dev Lab"><span class="sc-brand-icon" aria-hidden="true">◇</span> YOUNG DEV <span class="sc-brand-light">/ THE LAB</span></a><nav class="sc-topnav" aria-label="Exhibit navigation"><a href="index.html">The story</a><a href="#system-map">System map</a><a class="sc-back" href="../">← Lab</a></nav></header>
+  <main id="notes">
+    <header class="sc-notes-hero sc-container"><div class="sc-section-label"><span>TECHNICAL APPENDIX</span> FIELD ARCHIVE 001</div><p class="sc-notes-code">CASE ID / SC-2026-001 <span>STATUS: PARTIALLY COMPLETE</span></p><h1>Operator's<br><em>field notes.</em></h1><p>The engineering underneath the story. What we saw, what we verified, what we inferred, and what remained unresolved.</p><a class="sc-action sc-action-ghost" href="index.html">← Return to the chronicle</a></header>
+
+    <section class="sc-container sc-notes-intro" aria-label="Reading the evidence"><div class="sc-notes-cards"><article><div class="sc-marker sc-marker-ok">OBSERVED</div><h2>Known from the repair</h2><p>Something seen in a photograph, identified on equipment, or tested during the troubleshooting.</p></article><article><div class="sc-marker sc-marker-possible">INFERRED</div><h2>Plausible, not proven</h2><p>A logical explanation that fits the evidence without claiming certainty.</p></article><article><div class="sc-marker sc-marker-pending">PENDING</div><h2>Not yet established</h2><p>A subsystem still needing verification, not an achievement we quietly invent.</p></article></div></section>
+
+    <section id="system-map" class="sc-system-section sc-container"><div class="sc-section-label"><span>A</span> HOW THE SYSTEM FITS TOGETHER</div><div class="sc-heading-line"><h2>The machine<br><em>behind the illusion.</em></h2><p>A conceptual map of the simulator, not a manufacturer wiring diagram.</p></div>
+      <div class="sc-flow-grid" role="list" aria-label="Conceptual simulator signal flow">
+        <div class="sc-flow-card" role="listitem"><span>01 / INPUT</span><h3>Power switch</h3><p>A momentary button signal reaches the PC's front-panel header.</p><small>POWER SW → MSI JFP1</small></div>
+        <div class="sc-flow-card" role="listitem"><span>02 / COMPUTE</span><h3>Computer & simulation</h3><p>Windows runs the simulator software and coordinates the attached devices.</p><small>PC · WINDOWS · IRACING</small></div>
+        <div class="sc-flow-card" role="listitem"><span>03 / VISION</span><h3>Three screens</h3><p>Three physical monitors represent one continuous virtual field of view.</p><small>LEFT · CENTER · RIGHT</small></div>
+        <div class="sc-flow-card" role="listitem"><span>04 / CONTROL</span><h3>Wheel & pedals</h3><p>Driver inputs and steering feedback bring hands and feet into the loop.</p><small>SIMUCUBE 2 PRO · FANATEC</small></div>
+        <div class="sc-flow-card" role="listitem"><span>05 / FEEL</span><h3>Motion platform</h3><p>Mechanisms and control electronics move the cockpit as it simulates forces.</p><small>SIMCRAFT STRUCTURE</small></div>
+        <div class="sc-flow-card sc-flow-pending" role="listitem"><span>06 / SOUND</span><h3>Amplifier & speakers</h3><p>The intended sound path was identified, but its speaker-wire runs still needed tracing.</p><small>PYLE / PTA66BT? · PENDING</small></div>
+      </div>
+    </section>
+
+    <section class="sc-container sc-dossier-section"><div class="sc-section-label"><span>B</span> EVIDENCE DOSSIER</div><div class="sc-dossier-grid">
+      <article class="sc-dossier"><p class="sc-dossier-number">RECORD / 01</p><h3>Why the computer seemed dead</h3><p><span class="sc-marker sc-marker-ok">OBSERVED</span> No lights, fan noise, or start response. A two-socket <code>POWER SW</code> cable was disconnected near the MSI <code>JFP1</code> front-panel header.</p><p><span class="sc-marker sc-marker-possible">INFERRED</span> The larger replacement board/enclosure might have disturbed the old switch wire during installation.</p><p><span class="sc-marker sc-marker-ok">RESULT</span> Reconnecting the start-switch path was the critical breakthrough; the PC subsequently operated.</p><p class="sc-dossier-caution">Never assume that a remembered pair of pin numbers applies to a different board. Confirm the exact model's labeled header diagram and disconnect mains power before handling internal connectors.</p></article>
+      <article class="sc-dossier"><p class="sc-dossier-number">RECORD / 02</p><h3>How three screens became a single view</h3><p><span class="sc-marker sc-marker-ok">OBSERVED</span> The physical left-center-right display order was restored from a misordered Windows configuration.</p><p>In iRacing, the setup used three flat screens and three projections. During calibration, entered values included <strong>37-inch screen width</strong>, <strong>33-inch viewing distance</strong> and <strong>60° side-screen angle</strong>.</p><p><span class="sc-marker sc-marker-possible">CONTEXT</span> These were working setup values, not certified monitor dimensions or recommended defaults for all rigs. A small vertical offset was noticed and not conclusively eliminated.</p></article>
+      <article class="sc-dossier"><p class="sc-dossier-number">RECORD / 03</p><h3>The controls and motion</h3><p><span class="sc-marker sc-marker-ok">OBSERVED</span> A Simucube 2 Pro wheelbase was detected. The Fanatec ClubSport pedals responded through the Windows game-controller test, <code>joy.cpl</code>.</p><p>The frame is marked SimCraft. The platform was later reported calibrated and working. The precise SimCraft model has not been established.</p><p><span class="sc-marker sc-marker-pending">UNVERIFIED</span> Observing an emergency-stop button close or pause software did not establish that the mechanical actuator safety-stop path had been independently tested.</p></article>
+      <article class="sc-dossier"><p class="sc-dossier-number">RECORD / 04</p><h3>The sound that was still missing</h3><p><span class="sc-marker sc-marker-pending">PENDING</span> A Pyle amplifier, apparently model PTA66BT, was identified, and multiple loose speaker wires remained in an opaque cable bundle.</p><p>The intended signal path was <strong>Sound Blaster Z SE → Pyle amplifier → passive speakers</strong>. The actual terminals, speaker identities, polarity and wiring were not yet documented.</p><p class="sc-dossier-caution">Speaker terminals must be identified and the amplifier powered off before reworking wiring. Never connect speaker outputs directly to a PC's line-level audio jack.</p></article>
+    </div></section>
+
+    <section class="sc-container sc-photo-note"><div><div class="sc-section-label"><span>C</span> THE PHYSICAL EVIDENCE</div><h2>A magnificent<br><em>little complication.</em></h2><p>Under the OMP seat and three-screen cockpit lies an intricate network of brackets, tubular members, pedals, and actuated linkages. The photo was the most satisfying kind of documentation: evidence that the machine was more complicated—and more interesting—than the first diagnosis suggested.</p><a class="sc-action sc-action-ghost" href="index.html#gallery">View the photo archive ↗</a></div><img src="assets/mechanism-detail.webp" width="850" height="1249" alt="Metal linkage and pedal mechanism on the SimCraft simulator" loading="lazy"></section>
+
+    <section class="sc-notes-outro"><div class="sc-container sc-notes-outro-inner"><div><p class="sc-kicker">PRACTICAL LESSON</p><h2>Follow the evidence.<br><em>Respect the machinery.</em></h2><p>Test one hypothesis at a time. Separate observation from inference. Keep people and pets clear of a moving platform. Verify physical emergency stops independently of what software displays. And when a machine is silent, remember the humble button that tells it to begin.</p></div><div><a class="sc-action sc-action-primary" href="index.html">Read the story again →</a><a class="sc-action sc-action-ghost" href="../">Back to the Young Dev Lab →</a></div></div></section>
+  </main>
+  <footer class="sc-footer"><div class="sc-container"><span>YOUNG DEV / SIMCRAFT / 2026</span><span>A field log, not a service manual.</span><span>Photographs supplied from the workshop.</span></div></footer>
+</body>
+</html>
