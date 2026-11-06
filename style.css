@@ -148,7 +148,8 @@ body {
 }
 
 /* Gradient overlays */
-.about-scene::before, .about-scene::after,
+.about-scene::before,
+.about-scene::after,
 .contact-scene::before {
   content:"";
   position: absolute;
