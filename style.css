@@ -164,7 +164,7 @@ body {
 .about-scene::before {
   top: 0;
   background: linear-gradient(to bottom, #000, transparent);
-{
+}
 
 /* About: image fades down into black */
 .about-scene::after {
