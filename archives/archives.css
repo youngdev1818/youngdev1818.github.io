@@ -1,23 +1,14 @@
-/* Gallery Header */
-.gallery-header {
-  width: 100%;
-  max-width: 1600px;
-  margin: 0 auto;
-  
-  background-image: url("youngdev_archives_banner.webp");
-  background-size: 100% auto;
-  background-position: center;
-  background-repeat: no-repeat;
-  
-  min-height: 340px;
-
+.header {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
-  
   text-align: center;
-  padding: 40px 20px;
+}
+
+.banner-image {
+  display: block;
+  width: 100%;
+  height: auto;
 }
 
 /* Gallery Content */
