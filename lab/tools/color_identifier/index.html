@@ -4,12 +4,41 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Color Identifier | Young Dev</title>
+  <link rel="stylesheet" href="../../../style.css">
+  <link rel="stylesheet" href="color_identifier.css">
 </head>
 
 <body>
+
+  <nav class="main-nav">
+    <a href="../../../">Home</a>
+    <a href="../../">Lab</a>
+    <a href="../">Tools</a>
+  </nav>
+  
   <main>
     <h1>Color Identifier</h1>
     <p>Select an image and tap to sample a color.</p>
+    
+    <label class="upload-button" for="imageInput">
+      Select Image
+    </label>
+    <input type="file" id="imageInput" accept="image/">
+
+    <div class="image-area">
+      <p id="placeholder">Your image will appear here.</p>
+      <canvas id="imageCanvas" hidden></canvas>
+    </div>
+
+    <section class="results">
+      <div id="swatch"></div>
+
+      <div class="values">
+        <p>HEX: <strong id="hexValue">---</strong></p>
+        <p>RGB: <strong id="rgbValue">---</strong></p>
+        <button id="copyButton" disabled>Copy HEX</button>
+      </div>
+    </section>
     
   </main>
 </body>
