@@ -72,6 +72,14 @@ canvas[hidden] {
   border-radius: 10px;
 }
 
+#swatch {
+  width: 130px;
+  height: 130px;
+  background: 172c36;
+  border: 2px solid #87c9c5;
+  border-radius: 10px
+}
+
 .values {
   text-align: left;
 }
