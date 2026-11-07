@@ -64,12 +64,28 @@ canvas.addEventListener("pointerdown", (event) => {
     copyRgbButton.disabled = false;
 });
 
-// Copy the selected HEX value.
-copyButton.addEventListener("click", async () => {
-    try {
-        await navigator.clipboard.writeText(hexValue.textContent);
-        copyButton.textContent = "Copied!";
-    } catch {
-        copyButton.textContent = "Copy failed";
-    }
-});
+// Reusable clipboard function
+function setupCopyButton(button, valueElement, defaultLabel) {
+    let resetTimer;
+
+    button.addEventListener("click", async () => {
+        try {
+            await navigator.clipboard.writeText(valueElement.textContent);
+            button.textContent = "Copied!";
+        } catch {
+            button.textContent = "Copy failed";
+        }
+
+        // Cancel an old timer if the button is clicked again.
+        clearTimeout(resetTimer);
+
+        // Restore the original button text after time(ms).
+        resetTimer = setTimeout(() => {
+            button.textContent = defaultLabel;
+        }, 1000);
+    });
+}
+
+// Initialize both buttons.
+setupCopyButton(copyHexButton, hexValue, "Copy HEX");
+setupCopyButton(copyRgbButton, rgbValue, "Copy RGB");
