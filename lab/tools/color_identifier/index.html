@@ -24,7 +24,7 @@
     <label class="upload-button" for="imageInput">
       Select Image
     </label>
-    <input type="file" id="imageInput" accept="image/">
+    <input type="file" id="imageInput" accept="image/*">
 
     <div class="image-area">
       <p id="placeholder">Your image will appear here.</p>
@@ -37,7 +37,8 @@
       <div class="values">
         <p>HEX: <strong id="hexValue">---</strong></p>
         <p>RGB: <strong id="rgbValue">---</strong></p>
-        <button id="copyButton" disabled>Copy HEX</button>
+        <button id="copyHexButton" disabled>Copy HEX</button>
+        <button id="copyRgbButton" disabled>Copy RGB</button>
       </div>
     </section>
     
