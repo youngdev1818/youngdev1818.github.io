@@ -6,7 +6,8 @@ const placeholder = document.getElementById("placeholder");
 const swatch = document.getElementById("swatch");
 const hexValue = document.getElementById("hexValue");
 const rgbValue = document.getElementById("rgbValue");
-const copyButton = document.getElementById("copyButton");
+const copyHexButton = document.getElementById("copyHexButton");
+const copyRgbButton = document.getElementById("copyRgbButton");
 
 // Load the selected image onto the canvas.
 input.addEventListener("change", () => {
@@ -59,7 +60,8 @@ canvas.addEventListener("pointerdown", (event) => {
     swatch.style.backgroundColor = `rgb(${r}, ${g}, ${b})`;
     hexValue.textContent = hex;
     rgbValue.textContent = `${r}, ${g}, ${b}`;
-    copyButton.disabled = false;
+    copyHexButton.disabled = false;
+    copyRgbButton.disabled = false;
 });
 
 // Copy the selected HEX value.
