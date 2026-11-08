@@ -47,7 +47,7 @@ button {
   min-height: 160px;
 }
 
-canvas {
+#imageCanvas {
   max-width: 90%;
   height: auto;
   cursor: crosshair;
