@@ -73,6 +73,9 @@ function setColor(r, g, b) {
     rgbValue.value = `${r}, ${g}, ${b}`;
 
     swatch.style.backgroundColor = `rgb(${r}, ${g}, ${b})`;
+    
+    copyHexButton.disabled = false;
+    copyRgbButton.disabled = false;
 }
 
 function UpdateColorReadout(x,y) {
