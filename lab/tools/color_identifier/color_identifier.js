@@ -92,8 +92,8 @@ function updateLoupe(x, y, event, rect) {
     const sh = ey - sy;
 
     // Position the selected pixel exactly at the center.
-    const dx = center + (x - sx - 0.5) * ZOOM;
-    const dy = center + (y - sy - 0.5) * ZOOM;
+    const dx = center + (sx - x - 0.5) * ZOOM;
+    const dy = center + (sy - y - 0.5) * ZOOM;
 
     // Dark background represents space outside the image.
     loupeCtx.fillStyle = "#0b1923";
