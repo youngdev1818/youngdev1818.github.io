@@ -69,8 +69,8 @@ function setColor(r, g, b) {
         .join("")
         .toUpperCase();
 
-    hexValue.textContent = hex;
-    rgbValue.textContent = `${r}, ${g}, ${b}`;
+    hexValue.value = hex;
+    rgbValue.value = `${r}, ${g}, ${b}`;
 
     swatch.style.backgroundColor = `rgb(${r}, ${g}, ${b})`;
 }
