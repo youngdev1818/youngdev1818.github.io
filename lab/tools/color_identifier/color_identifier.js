@@ -6,6 +6,8 @@ const loupe = document.getElementById("loupe");
 const loupeCanvas = document.getElementById("loupeCanvas");
 const loupeCtx = loupeCanvas.getContext("2d");
 
+let isSampling = false;
+
 const placeholder = document.getElementById("placeholder");
 const swatch = document.getElementById("swatch");
 const hexValue = document.getElementById("hexValue");
@@ -76,7 +78,7 @@ function UpdateColorReadout(x,y) {
     copyRgbButton.disabled = false;
 }
 
-function updateLoupe(x, y, rect) {
+function updateLoupe(x, y, event, rect) {
     const halfSample = SAMPLE_SIZE / 2;
 
     let sx = Math.round(x - halfSample);
@@ -85,9 +87,9 @@ function updateLoupe(x, y, rect) {
     sx = Math.max(0, Math.min(canvas.width - SAMPLE_SIZE, sx));
     sy = Math.max(0, Math.min(canvas.height - SAMPLE_SIZE, sy));
 
-    loupeCTX.clearRect(0, 0, LOUPE_SIZE, LOUPE_SIZE);
-    loupeCTX.imageSmoothingEnabled = false;
-    loupeCTX.drawImage(
+    loupeCtx.clearRect(0, 0, LOUPE_SIZE, LOUPE_SIZE);
+    loupeCtx.imageSmoothingEnabled = false;
+    loupeCtx.drawImage(
         canvas,
         sx, sy, SAMPLE_SIZE, SAMPLE_SIZE,
         0, 0, LOUPE_SIZE, LOUPE_SIZE
@@ -121,9 +123,10 @@ function updateLoupe(x, y, rect) {
 }
 
 function sampleAtEvent(event) {
-    const { x, y, rect } = getCanvasPoint(event);
+    const { x, y, rect } = getCanvasCoordinates(event);
+
     UpdateColorReadout(x, y);
-    updateLoupe(x, y, rect);
+    updateLoupe(x, y, event, rect);
 }
 
 
