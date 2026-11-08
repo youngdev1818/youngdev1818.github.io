@@ -127,7 +127,30 @@ canvas[hidden] {
 
 .values {
   text-align: left;
+  flex: 1 1 320px;
+  max-width: 400px;
 }
+
+.value-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: clamp(0.8rem, 1.5vw, 1.1rem);
+  gap: 12px;
+  margin: 10px 0;
+}
+
+.value-row p {
+  text-align: left;
+  flex: 1;
+  margin: 0;
+}
+
+.value-row button {
+  flex: 0 0 110px;
+  font-size: clamp(0.7rem, 1vw, 1rem);
+}
+
 
 button:disabled {
   opacity: 0.5;
