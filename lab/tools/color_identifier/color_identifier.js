@@ -108,22 +108,6 @@ function updateLoupe(x, y, event, rect) {
         dx, dy, sw * ZOOM, sh * ZOOM
     );
 
-    // Draw a subtle grid around individual pixels.
-    loupeCtx.strokeStyle = "rgba(255, 255, 255, 0.18)";
-    loupeCtx.lineWidth = 1;
-    loupeCtx.beginPath();
-
-    const firstLine = (center - ZOOM / 2) % ZOOM;
-
-    for (let p = firstLine; p < LOUPE_SIZE; p += ZOOM) {
-        loupeCtx.moveTo(p + 0.5, 0);
-        loupeCtx.lineTo(p + 0.5, LOUPE_SIZE);
-        loupeCtx.moveTo(0, p + 0.5);
-        loupeCtx.lineTo(LOUPE_SIZE, p + 0.5);
-    }
-
-    loupeCtx.stroke();
-
     // Position the loupe near the pointer.
     const gap = 20;
     const margin = 8;
