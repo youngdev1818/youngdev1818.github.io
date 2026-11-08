@@ -42,7 +42,6 @@ input.addEventListener("change", () => {
 
 const LOUPE_SIZE = 120;
 const ZOOM = 10;
-const SAMPLE_SIZE = LOUPE_SIZE / ZOOM;
 
 function getCanvasCoordinates(event) {
     const rect = canvas.getBoundingClientRect();
@@ -79,54 +78,88 @@ function UpdateColorReadout(x,y) {
 }
 
 function updateLoupe(x, y, event, rect) {
-    const halfSample = SAMPLE_SIZE / 2;
+    const center = LOUPE_SIZE / 2;
+    const radius = Math.ceil(center / ZOOM);
 
-    let sx = Math.round(x - halfSample);
-    let sy = Math.round(y - halfSample);
+    // Visible source pixels, clipped to the image bounds.
+    const sx = Math.max(0, x - radius);
+    const sy = Math.max(0, y - radius);
 
-    sx = Math.max(0, Math.min(canvas.width - SAMPLE_SIZE, sx));
-    sy = Math.max(0, Math.min(canvas.height - SAMPLE_SIZE, sy));
+    const ex = Math.min(canvas.width, x + radius + 1);
+    const ey = Math.min(canvas.height, y + radius + 1);
 
-    loupeCtx.clearRect(0, 0, LOUPE_SIZE, LOUPE_SIZE);
+    const sw = ex - sx;
+    const sh = ey - sy;
+
+    // Position the selected pixel exactly at the center.
+    const dx = center + (x - sx - 0.5) * ZOOM;
+    const dy = center + (y - sy - 0.5) * ZOOM;
+
+    // Dark background represents space outside the image.
+    loupeCtx.fillStyle = "#0b1923";
+    loupeCtx.fillRect(0, 0, LOUPE_SIZE, LOUPE_SIZE);
+
+    // Draw enlarged pixels without smoothing.
     loupeCtx.imageSmoothingEnabled = false;
+
     loupeCtx.drawImage(
         canvas,
-        sx, sy, SAMPLE_SIZE, SAMPLE_SIZE,
-        0, 0, LOUPE_SIZE, LOUPE_SIZE
+        sx, sy, sw, sh,
+        dx, dy, sw * ZOOM, sh * ZOOM
     );
 
-    const offsetX = event.clientX - rect.left;
-    const offsetY = event.clientY - rect.top;
+    // Draw a subtle grid around individual pixels.
+    loupeCtx.strokeStyle = "rgba(255, 255, 255, 0.18)";
+    loupeCtx.lineWidth = 1;
+    loupeCtx.beginPath();
 
-    let loupeLeft = offsetX + 20;
-    let loupeTop = offsetY - LOUPE_SIZE - 20;
+    const firstLine = (center - ZOOM / 2) % ZOOM;
 
-    if (loupeLeft + LOUPE_SIZE > rect.width) {
-        loupeLeft = offsetX - LOUPE_SIZE - 20;
+    for (let p = firstLine; p < LOUPE_SIZE; p += ZOOM) {
+        loupeCtx.moveTo(p + 0.5, 0);
+        loupeCtx.lineTo(p + 0.5, LOUPE_SIZE);
+        loupeCtx.moveTo(0, p + 0.5);
+        loupeCtx.lineTo(LOUPE_SIZE, p + 0.5);
     }
 
-    if (loupeLeft < 0) {
-        loupeLeft = 10;
+    loupeCtx.stroke();
+
+    // Position the loupe near the pointer.
+    const gap = 20;
+    const margin = 8;
+    
+    let left = event.clientX + gap;
+    let top = event.clientY - LOUPE_SIZE - gap;
+
+    // Flip left when near the right screen edge.
+    if (left + LOUPE_SIZE > window.innerWidth - margin) {
+        left = event.clientX - LOUPE_SIZE - gap;
     }
 
-    if (loupeTop < 0) {
-        loupeTop = offsetY + 20;
+    // Flip below when near the top screen edge.
+    if (top < margin) {
+        top = event.clientY + gap;
     }
 
-    if (loupeTop + LOUPE_SIZE > rect.height) {
-        loupeTop = rect.height - LOUPE_SIZE - 10;
-    }
+    // Keep the loupe within the viewport.
+    left = Math.max(margin, Math.min(
+        left, window.innerWidth - LOUPE_SIZE - margin
+    ));
 
-    loupe.style.left = `${loupeLeft}px`;
-    loupe.style.top = `${loupeTop}px`;
+    top = Math.max(margin, Math.min(
+        top, window.innerHeight - LOUPE_SIZE - margin
+    ));
+
+    loupe.style.left = `${left}px`;
+    loupe.style.top = `${top}px`;
     loupe.hidden = false;
 }
 
 function sampleAtEvent(event) {
-    const { x, y, rect } = getCanvasCoordinates(event);
+    const { x, y } = getCanvasCoordinates(event);
 
     UpdateColorReadout(x, y);
-    updateLoupe(x, y, event, rect);
+    updateLoupe(x, y, event);
 }
 
 

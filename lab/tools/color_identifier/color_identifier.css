@@ -16,9 +16,15 @@ main {
   text-align: center;
 }
 
-h1 {
+.tool-title {
   color: #6ce7d5;
   text-shadow: 0 0 18px #15b8aa66;
+  margin-bottom: 10px;
+}
+
+.tool-description {
+  color: #91aaaa;
+  margin-bottom: 30px;
 }
 
 .upload-button,
@@ -64,7 +70,7 @@ canvas[hidden] {
 }
 
 #loupe {
-  position: absolute;
+  position: fixed;
   width: 120px;
   height: 120px;
   border: 2px solid #87c9c5;
