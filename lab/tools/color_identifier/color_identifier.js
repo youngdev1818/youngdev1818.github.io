@@ -2,6 +2,10 @@ const input = document.getElementById("imageInput");
 const canvas = document.getElementById("imageCanvas");
 const ctx = canvas.getContext("2d", { willReadFrequently: true });
 
+const loupe = document.getElementById("loupe");
+const loupeCanvas = document.getElementById("loupeCanvas");
+const loupeCtx = loupeCanvas.getContext("2d");
+
 const placeholder = document.getElementById("placeholder");
 const swatch = document.getElementById("swatch");
 const hexValue = document.getElementById("hexValue");
@@ -34,8 +38,11 @@ input.addEventListener("change", () => {
     image.src = url;
 });
 
-// Read the pixel touched by user.
-canvas.addEventListener("pointerdown", (event) => {
+const LOUPE_SIZE = 120;
+const ZOOM = 10;
+const SAMPLE_SIZE = LOUPE_SIZE / ZOOM;
+
+function getCanvasCoordinates(event) {
     const rect = canvas.getBoundingClientRect();
 
     const x = Math.min(canvas.width - 1, Math.max(0,
@@ -46,8 +53,12 @@ canvas.addEventListener("pointerdown", (event) => {
         Math.floor((event.clientY - rect.top) * canvas.height / rect.height)
     ));
 
+    return { x, y, rect };
+}
+
+function UpdateColorReadout(x,y) {
     const pixel = ctx.getImageData(x, y, 1, 1).data;
-    
+
     const r = pixel[0];
     const g = pixel[1];
     const b = pixel[2];
@@ -60,8 +71,88 @@ canvas.addEventListener("pointerdown", (event) => {
     swatch.style.backgroundColor = `rgb(${r}, ${g}, ${b})`;
     hexValue.textContent = hex;
     rgbValue.textContent = `${r}, ${g}, ${b}`;
+
     copyHexButton.disabled = false;
     copyRgbButton.disabled = false;
+}
+
+function updateLoupe(x, y, rect) {
+    const halfSample = SAMPLE_SIZE / 2;
+
+    let sx = Math.round(x - halfSample);
+    let sy = Math.round(y - halfSample);
+
+    sx = Math.max(0, Math.min(canvas.width - SAMPLE_SIZE, sx));
+    sy = Math.max(0, Math.min(canvas.height - SAMPLE_SIZE, sy));
+
+    loupeCTX.clearRect(0, 0, LOUPE_SIZE, LOUPE_SIZE);
+    loupeCTX.imageSmoothingEnabled = false;
+    loupeCTX.drawImage(
+        canvas,
+        sx, sy, SAMPLE_SIZE, SAMPLE_SIZE,
+        0, 0, LOUPE_SIZE, LOUPE_SIZE
+    );
+
+    const offsetX = event.clientX - rect.left;
+    const offsetY = event.clientY - rect.top;
+
+    let loupeLeft = offsetX + 20;
+    let loupeTop = offsetY - LOUPE_SIZE - 20;
+
+    if (loupeLeft + LOUPE_SIZE > rect.width) {
+        loupeLeft = offsetX - LOUPE_SIZE - 20;
+    }
+
+    if (loupeLeft < 0) {
+        loupeLeft = 10;
+    }
+
+    if (loupeTop < 0) {
+        loupeTop = offsetY + 20;
+    }
+
+    if (loupeTop + LOUPE_SIZE > rect.height) {
+        loupeTop = rect.height - LOUPE_SIZE - 10;
+    }
+
+    loupe.style.left = `${loupeLeft}px`;
+    loupe.style.top = `${loupeTop}px`;
+    loupe.hidden = false;
+}
+
+function sampleAtEvent(event) {
+    const { x, y, rect } = getCanvasPoint(event);
+    UpdateColorReadout(x, y);
+    updateLoupe(x, y, rect);
+}
+
+
+// Start sampling on press.
+canvas.addEventListener("pointerdown", (event) => {
+    if (canvas.hidden) return;
+
+    isSampling = true;
+    canvas.setPointerCapture(event.pointerId);
+    sampleAtEvent(event);
+});
+
+// Continue sampling while dragging.
+canvas.addEventListener("pointermove", (event) => {
+    if (!isSampling) return;
+    sampleAtEvent(event);
+});
+
+// Stop sampling on release.
+canvas.addEventListener("pointerup", (event) => {
+    isSampling = false;
+    loupe.hidden = true;
+    canvas.releasePointerCapture(event.pointerId);
+});
+
+canvas.addEventListener("pointercancel", (event) => {
+    isSampling = false;
+    loupe.hidden = true;
+    canvas.releasePointerCapture(event.pointerId);
 });
 
 // Reusable clipboard function

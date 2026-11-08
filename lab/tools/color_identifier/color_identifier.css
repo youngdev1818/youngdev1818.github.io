@@ -38,6 +38,7 @@ button {
 }
 
 .image-area {
+  position: relative;
   margin: 24px 0;
   border: 1px solid #317c83;
   border-radius: 12px;
@@ -50,6 +51,7 @@ canvas {
   max-width: 90%;
   height: auto;
   cursor: crosshair;
+  touch-action: none;
 }
 
 canvas[hidden] {
@@ -59,6 +61,65 @@ canvas[hidden] {
 #placeholder {
   padding: 50px 10px;
   color: #91aaaa;
+}
+
+#loupe {
+  position: absolute;
+  width: 120px;
+  height: 120px;
+  border: 2px solid #87c9c5;
+  border-radius: 50%;
+  overflow: hidden;
+  background: rgba(16, 31, 41, 0.8);
+  box-shadow: 0 0 18px rgba(0, 255, 204, 0.25);
+  pointer-events: none;
+  z-index: 10;
+}
+
+#loupe[hidden] {
+  display: none;
+}
+
+#loupeCanvas {
+  width: 100%;
+  height: 100%;
+  display: block;
+  image-rendering: pixelated;
+}
+
+.crosshair {
+  position: absolute;
+  background: rgba(255, 255, 255, 0.85);
+  pointer-events: none;
+}
+
+.crosshair-x {
+  top: 50%;
+  left: 0;
+  width: 100%;
+  height: 1px;
+  transform: translateY(-0.5px);
+}
+
+.crosshair-y {
+  top: 0;
+  left: 50%;
+  width: 1px;
+  height: 100%;
+  transform: translateX(-0.5px);
+}
+
+.center-dot {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 8px;
+  height: 8px;
+  transform: translate(-50%, -50%);
+  border: 1px solid rgba(255, 255, 255, 0.95);
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.25);
+  pointer-events: none;
 }
 
 .results {
