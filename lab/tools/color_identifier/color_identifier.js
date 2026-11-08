@@ -57,25 +57,67 @@ function getCanvasCoordinates(event) {
     return { x, y, rect };
 }
 
-function UpdateColorReadout(x,y) {
-    const pixel = ctx.getImageData(x, y, 1, 1).data;
+// The most recent accepted color.
+let currentColor = [0, 0, 0];
 
-    const r = pixel[0];
-    const g = pixel[1];
-    const b = pixel[2];
+// Convert and synchronize HEX, RGB, and swatch values.
+function setColor(r, g, b) {
+    currentColor = [r, g, b];
 
     const hex = "#" + [r, g, b]
         .map(value => value.toString(16).padStart(2, "0"))
         .join("")
         .toUpperCase();
 
-    swatch.style.backgroundColor = `rgb(${r}, ${g}, ${b})`;
     hexValue.textContent = hex;
     rgbValue.textContent = `${r}, ${g}, ${b}`;
 
-    copyHexButton.disabled = false;
-    copyRgbButton.disabled = false;
+    swatch.style.backgroundColor = `rgb(${r}, ${g}, ${b})`;
 }
+
+function UpdateColorReadout(x,y) {
+    const pixel = ctx.getImageData(x, y, 1, 1).data;
+
+    setColor(pixel[0], pixel[1], pixel[2]);
+}
+
+// Accept manually entered HEX values.
+hexValue.addEventListener("change", () => {
+    const hex = hexValue.value.trim();
+
+    if (/^#[0-9a-fA-F]{6}$/.test(hex)) {
+        const r = parseInt(hex.slice(1, 3), 16);
+        const g = parseInt(hex.slice(3, 5), 16);
+        const b = parseInt(hex.slice(5, 7), 16);
+
+        setColor(r, g, b);
+    } else {
+        // Restore last valid color.
+        setColor(...currentColor);
+    }
+});
+
+// Accept manually entered RGB values.
+rgbValue.addEventListener("change", () => {
+    const parts = rgbValue.value
+    .split(",")
+    .map(value => value.trim());
+
+    const valid = parts.length === 3 && parts.every(value =>
+        /^\d{1,3}$/.test(value) && Number(value) <= 255
+    );
+
+    if (valid) {
+        const [r, g, b] = parts.map(Number);
+        setColor(r, g, b);
+    } else {
+        // Restore last valid color.
+        setColor(...currentColor);
+    }
+});
+
+// Initialize the editor without requiring an image.
+setColor(0, 0, 0);
 
 function updateLoupe(x, y, event, rect) {
     const center = LOUPE_SIZE / 2;
@@ -181,7 +223,7 @@ function setupCopyButton(button, valueElement, defaultLabel) {
 
     button.addEventListener("click", async () => {
         try {
-            await navigator.clipboard.writeText(valueElement.textContent);
+            await navigator.clipboard.writeText(valueElement.value);
             button.textContent = "Copied!";
         } catch {
             button.textContent = "Copy failed";

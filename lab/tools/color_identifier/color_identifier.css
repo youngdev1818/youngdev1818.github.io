@@ -132,22 +132,36 @@ canvas[hidden] {
 }
 
 .value-row {
-  display: flex;
+  display: grid;
+  grid-template-columns: 45px minmax(0, 1fr) 110px;
   align-items: center;
-  justify-content: space-between;
-  font-size: clamp(0.8rem, 1.5vw, 1.1rem);
-  gap: 12px;
+  gap: 8px;
   margin: 10px 0;
 }
 
-.value-row p {
-  text-align: left;
-  flex: 1;
-  margin: 0;
+.value-row label {
+  font-size: clamp(0.8rem, 1.5vw, 1.1rem);
+}
+
+.value-row input {
+  width: 100%;
+  min-width: 0;
+  padding: 10px;
+  border: 1px solid #518c90;
+  border-radius: 7px;
+  background: #172c36;
+  color: #e1f5f3;
+  font-family: monospace;
+  font-size: clamp(0.8rem, 1.5vw, 1.1rem);
+}
+
+.value-row input:focus {
+  outline: 1px solid #6ce7d5;
 }
 
 .value-row button {
-  flex: 0 0 110px;
+  width: 100%;
+  padding: 10px 5px;
   font-size: clamp(0.7rem, 1vw, 1rem);
 }
 
@@ -155,4 +169,15 @@ canvas[hidden] {
 button:disabled {
   opacity: 0.5;
   cursor: not-allowed;
+}
+
+@media (max-width: 450px) {
+  .value-row {
+    grid-template-columns: 40px minmax(0, 1fr) 85px;
+    gap: 5px;
+  }
+
+  .value-row button {
+    font-size: 0.7rem;
+  }
 }

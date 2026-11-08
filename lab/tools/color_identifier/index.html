@@ -36,11 +36,13 @@
 
       <div class="values">
         <div class="value-row">
-          <p>HEX: <strong id="hexValue">---</strong></p>
+          <label for="hexValue">HEX:</label>
+          <input type="text" id="hexValue" value="#000000" maxlength="7" spellcheck="false">
           <button id="copyHexButton" disabled>Copy HEX</button>
         </div>
         <div class="value-row">
-          <p>RGB: <strong id="rgbValue">---</strong></p>
+          <label for="rgbValue">RGB:</label>
+          <input type="text" id="rgbValue" value="0, 0, 0" spellcheck="false">
           <button id="copyRgbButton" disabled>Copy RGB</button>
         </div>
       </div>
