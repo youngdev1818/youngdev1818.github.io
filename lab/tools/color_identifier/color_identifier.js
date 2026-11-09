@@ -225,6 +225,12 @@ const pickerToggle = document.getElementById("pickerToggle");
 const hsvPanel = document.getElementById("hsvPanel");
 const pickerClose = document.getElementById("pickerClose");
 
+const svSquare = document.getElementById("svSquare");
+const svCursor = document.getElementById("svCursor");
+const hueSlider = document.getElementById("hueSlider");
+
+let hsv = { h: 180, s: 1, v: 1 };
+
 function closePicker() {
     hsvPanel.hidden = true;
     pickerToggle.setAttribute("aria-expanded", "false");
@@ -259,6 +265,8 @@ pickerToggle.addEventListener("click", () => {
 
     hsvPanel.hidden = false;
     pickerToggle.setAttribute("aria-expanded", "true");
+
+    syncPickerToColor();
     positionPicker();
 });
 
@@ -283,6 +291,148 @@ window.addEventListener("resize", () => {
     if (!hsvPanel.hidden) positionPicker();
 });
 
+// ======= HSV COLOR ENGINE =======
+
+// Convert RGB to HSV.
+function rgbToHsv(r, g, b) {
+    r /= 255;
+    g /= 255;
+    b /= 255;
+
+    const max = Math.max(r, g, b);
+    const min = Math.min(r, g, b);
+    const delta = max - min;
+    
+    let h = 0;
+
+    if (delta !== 0) {
+        if (max === r) {
+            h = ((g - b) / delta) % 6;
+        } else if (max === g) {
+            h = (b - r) / delta + 2;
+        } else {
+            h = (r - g) / delta + 4;
+        }
+        
+        h = (h * 60 + 360) % 360;
+    }
+
+    return {
+        h: h,
+        s: max === 0 ? 0 : delta / max,
+        v: max
+    };
+}
+
+// Convert HSV back to RGB.
+function hsvToRgb(h, s, v) {
+    const c = v * s;
+    const sector = (h % 360) / 60;
+    const x = c * (1 - Math.abs(sector % 2 - 1));
+    const m = v - c;
+    let rgb;
+
+    if (sector < 1) rgb = [c, x, 0];
+    else if (sector < 2) rgb = [x, c, 0];
+    else if (sector < 3) rgb = [0, c, x];
+    else if (sector < 4) rgb = [0, x, c];
+    else if (sector < 5) rgb = [x, 0, c];
+    else rgb = [c, 0, x];
+
+    return rgb.map(n => Math.round((n + m) * 255));
+}
+
+// Update the square's colors and cursor.
+function updatePickerVisual() {
+    svSquare.style.background = `
+    linear-gradient(to top, #000, transparent),
+    linear-gradient(to right, #fff, transparent),
+    hsl(${hsv.h}, 100%, 50%)`;
+
+    svCursor.style.left = `${hsv.s * 100}%`;
+    svCursor.style.top = `${(1 - hsv.v) * 100}%`;
+
+    hueSlider.value = Math.round(hsv.h);
+}
+
+// Read the current RGB color when opening the picker.
+function syncPickerToColor() {
+    const converted = rgbToHsv(...currentColor);
+
+    // Gray and black have no unique hue.
+    // Preserve our last selected hue in those cases.
+    if (converted.s === 0) {
+        converted.h = hsv.h;
+    }
+
+    hsv = converted;
+    updatePickerVisual();
+}
+
+// Apply the current HSV color to HEX, RGB and swatch.
+function applyHsvColor() {
+    const rgb = hsvToRgb(hsv.h, hsv.s, hsv.v);
+
+    setColor(...rgb);
+    updatePickerVisual();
+}
+
+// Read a point within the gradient square.
+function sampleSquare(event) {
+    const rect = svSquare.getBoundingClientRect();
+
+    const x = (event.clientX - rect.left) / rect.width;
+    const y = (event.clientY - rect.top) / rect.height;
+
+    hsv.s = Math.max(0, Math.min(1, x));
+    hsv.v = 1 - Math.max(0, Math.min(1, y));
+
+    applyHsvColor();
+}
+
+// Dragging inside the gradient square.
+let squarePointer = null;
+
+svSquare.addEventListener("pointerdown", event => {
+    if (event.pointerType === "mouse" && event.button !== 0) {
+        return;
+    }
+
+    if (squarePointer !== null) return;
+
+    squarePointer = event.pointerId;
+    svSquare.setPointerCapture(event.pointerId);
+    sampleSquare(event);
+});
+
+svSquare.addEventListener("pointermove", event => {
+    if (event.pointerId === squarePointer) {
+        sampleSquare(event);
+    }
+});
+
+function stopSquareDrag(event) {
+    if (event.pointerId === squarePointer) {
+        squarePointer = null;
+    }
+}
+
+svSquare.addEventListener("pointerup", stopSquareDrag);
+svSquare.addEventListener("pointercancel", stopSquareDrag);
+
+// Change hue using the rainbow slider.
+hueSlider.addEventListener("input", () => {
+    hsv.h = Number(hueSlider.value);
+
+    // Make the slider immediately useful when
+    // starting from black, white, or gray.
+    if (hsv.s === 0) hsv.s = 1;
+    if (hsv.v === 0) hsv.v = 1;
+
+    applyHsvColor();
+});
+
+// =====================
 
 // Reusable clipboard function
 function setupCopyButton(button, valueElement, defaultLabel) {

@@ -168,12 +168,27 @@ canvas[hidden] {
 
 /* Saturation and value */
 #svSquare {
+  position: relative;
+  width: 100%;
   height: 155px;
   border-radius: 5px;
+  cursor: crosshair;
+  touch-action: none;
   background:
     linear-gradient(to top, #000, transparent),
     linear-gradient(to right, #fff, transparent),
     cyan;
+}
+
+#svCursor {
+  position: absolute;
+  width: 14px;
+  height: 14px;
+  border: 2px solid #fff;
+  border-radius: 50%;
+  box-shadow: 0 0 3px rgba(0, 0, 0, 0.4);
+  transform: translate(-50%, -50%);
+  pointer-events: none;
 }
 
 #hsvPanel label {
@@ -183,8 +198,33 @@ canvas[hidden] {
 
 /* Hue slider */
 #hueSlider {
+  display: block;
   width: 100%;
-  accent-color: #24c9c3;
+  height: 16px;
+  margin: 10px 0;
+  appearance: none;
+  border-radius: 5px;
+  cursor: pointer;
+  background: linear-gradient(to right, red, yellow, lime, cyan, blue, magenta, red);
+}
+
+/* Chrome, Edge, Safari slider handle */
+#hueSlider::-webkit-slider-thumb {
+  appearance: none;
+  width: 12px;
+  height: 24px;
+  border: 2px solid #122631;
+  border-radius: 4px;
+  background: #fff;
+}
+
+/* Firefox slider handle */
+#hueSlider::-moz-range-thumb {
+  width: 12px;
+  height: 24px;
+  border: 2px solid #122631;
+  border-radius: 4px;
+  background: #fff;
 }
 
 #swatch {
