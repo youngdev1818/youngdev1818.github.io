@@ -32,7 +32,14 @@
     </div>
 
     <section class="results">
-      <div id="swatch"></div>
+      <div class="swatch-wrap">
+        <button id="tool-picker" type="button"
+          aria-label="Open HSV Picker"
+          aria-expanded="false"
+          aria-controls="hsvPanel"></button>
+          
+        <div id="swatch"></div>
+      </div>
 
       <div class="values">
         <div class="value-row">
@@ -49,6 +56,19 @@
     </section>
     
   </main>
+
+  <!-- Floating HSV color Picker -->
+  <div id="hsvPanel" hidden>
+    <div class="picker-header">
+      <strong>HSV Color Picker</strong>
+      <button id="closePicker" type="button" aria-label="Close HSV Picker">x</button>
+    </div>
+
+    <div id="svSquare"></div>
+
+    <label for="hueSlider">Hue</label>
+    <input id="hueSlider" type="range" min="0" max="359" value="180">
+  </div>
 
   <div id="loupe" hidden>
     <canvas id="loupeCanvas" width="120" height="120"></canvas>

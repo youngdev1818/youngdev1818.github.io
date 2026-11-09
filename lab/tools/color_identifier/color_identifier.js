@@ -73,7 +73,7 @@ function setColor(r, g, b) {
     rgbValue.value = `${r}, ${g}, ${b}`;
 
     swatch.style.backgroundColor = `rgb(${r}, ${g}, ${b})`;
-    
+
     copyHexButton.disabled = false;
     copyRgbButton.disabled = false;
 }
@@ -219,6 +219,70 @@ canvas.addEventListener("pointercancel", (event) => {
     loupe.hidden = true;
     canvas.releasePointerCapture(event.pointerId);
 });
+
+// HSV popup controls
+const pickerToggle = document.getElementById("pickerToggle");
+const hsvPanel = document.getElementById("hsvPanel");
+const pickerClose = document.getElementById("pickerClose");
+
+function closePicker() {
+    hsvPanel.hidden = true;
+    pickerToggle.setAttribute("aria-expanded", "false");
+}
+
+function positionPicker() {
+    const button = pickerToggle.getBoundingClientRect();
+    const panel = hsvPanel.getBoundingClientRect();
+    const margin = 8;
+    const gap = 12;
+
+    const left = Math.max(margin, Math.min(
+        button.left,
+        window.innerWidth - panel.width - margin
+    ));
+    let top = button.top - panel.height - gap;
+
+    // Open below if there isnt enough room above.
+    if (top < margin) {
+        top = button.bottom + gap;
+    }
+
+    hsvPanel.style.left = `${left}px`;
+    hsvPanel.style.top = `${top}px`;
+}
+
+pickerToggle.addEventListener("click", () => {
+    if (!hsvPanel.hidden) {
+        closePicker();
+        return;
+    }
+
+    hsvPanel.hidden = false;
+    pickerToggle.setAttribute("aria-expanded", "true");
+    positionPicker();
+});
+
+pickerClose.addEventListener("click", closePicker);
+
+// Close when clicking outside the picker.
+document.addEventListener("pointerdown", (event) => {
+    if (!hsvPanel.hidden &&
+        !hsvPanel.contains(event.target) &&
+        !pickerToggle.contains(event.target)) {
+        closePicker();
+    }
+});
+
+// Close with escape.
+document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape") closePicker();
+});
+
+// keep HSV panel positioned after viewport changes.
+window.addEventListener("resize", () => {
+    if (!hsvPanel.hidden) positionPicker();
+});
+
 
 // Reusable clipboard function
 function setupCopyButton(button, valueElement, defaultLabel) {
