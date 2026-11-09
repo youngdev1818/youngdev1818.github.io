@@ -60,6 +60,38 @@ function getCanvasCoordinates(event) {
 // The most recent accepted color.
 let currentColor = [0, 0, 0];
 
+// Results swatch transparency and backdrop.
+let swatchAlpha = 1;
+let stripeAngle = 0;
+
+// Render the current color over the striped background.
+function updateSwatch() {
+    const [r, g, b] = currentColor;
+    swatch.style.setProperty("--overlay-color", `rgba(${r}, ${g}, ${b}, ${swatchAlpha})`);
+    swatch.style.setProperty("--stripe-angle", `${stripeAngle}deg`);
+}
+
+// Update the results swatch opacity.
+const alphaSlider = document.getElementById("alphaSlider");
+const alphaOutput = document.getElementById("alphaOutput");
+
+alphaSlider.addEventListener("input", () => {
+    const percent = Number(alphaSlider.value);
+    swatchAlpha = percent / 100;
+    alphaOutput.textContent = `${percent}%`;
+    updateSwatch();
+});
+
+// Rotate the grayscale preview background.
+const stripeAngleSlider = document.getElementById("stripeAngleSlider");
+const stripeAngleOutput = document.getElementById("stripeAngleOutput");
+
+stripeAngleSlider.addEventListener("input", () => {
+    stripeAngle = Number(stripeAngleSlider.value);
+    stripeAngleOutput.textContent = `${stripeAngle}°`;
+    updateSwatch();
+});
+
 // Convert and synchronize HEX, RGB, and swatch values.
 function setColor(r, g, b, fromPicker = false) {
     currentColor = [r, g, b];
@@ -72,7 +104,7 @@ function setColor(r, g, b, fromPicker = false) {
     hexValue.value = hex;
     rgbValue.value = `${r}, ${g}, ${b}`;
 
-    swatch.style.backgroundColor = `rgb(${r}, ${g}, ${b})`;
+    updateSwatch();
 
     copyHexButton.disabled = false;
     copyRgbButton.disabled = false;
