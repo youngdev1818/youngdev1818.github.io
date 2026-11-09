@@ -223,7 +223,7 @@ canvas.addEventListener("pointercancel", (event) => {
 // HSV popup controls
 const pickerToggle = document.getElementById("pickerToggle");
 const hsvPanel = document.getElementById("hsvPanel");
-const pickerClose = document.getElementById("pickerClose");
+const closePicker = document.getElementById("pickerClose");
 
 function closePicker() {
     hsvPanel.hidden = true;
