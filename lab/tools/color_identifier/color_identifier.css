@@ -32,9 +32,9 @@ button {
   display: inline-block;
   background: #176b70;
   color: white;
-  padding: 12px 20px;
+  padding: 10px 12px;
   border: 1px solid #64d6cb;
-  border-radius: 8px;
+  border-radius: 18px;
   cursor: pointer;
   font-size: 1rem;
 }
@@ -50,7 +50,7 @@ button {
   border-radius: 12px;
   background: #101f29;
   overflow: hidden;
-  min-height: 160px;
+  min-height: 10px;
 }
 
 #imageCanvas {
@@ -65,7 +65,7 @@ canvas[hidden] {
 }
 
 #placeholder {
-  padding: 50px 10px;
+  padding: 10px 10px;
   color: #91aaaa;
 }
 
