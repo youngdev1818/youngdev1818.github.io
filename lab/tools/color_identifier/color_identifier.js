@@ -61,7 +61,7 @@ function getCanvasCoordinates(event) {
 let currentColor = [0, 0, 0];
 
 // Convert and synchronize HEX, RGB, and swatch values.
-function setColor(r, g, b) {
+function setColor(r, g, b, fromPicker = false) {
     currentColor = [r, g, b];
 
     const hex = "#" + [r, g, b]
@@ -76,6 +76,8 @@ function setColor(r, g, b) {
 
     copyHexButton.disabled = false;
     copyRgbButton.disabled = false;
+
+    if (!fromPicker) syncPickerToColor();
 }
 
 function UpdateColorReadout(x,y) {
@@ -118,9 +120,6 @@ rgbValue.addEventListener("change", () => {
         setColor(...currentColor);
     }
 });
-
-// Initialize the editor without requiring an image.
-setColor(0, 0, 0);
 
 function updateLoupe(x, y, event, rect) {
     const center = LOUPE_SIZE / 2;
@@ -276,7 +275,11 @@ pickerClose.addEventListener("click", closePicker);
 document.addEventListener("pointerdown", (event) => {
     if (!hsvPanel.hidden &&
         !hsvPanel.contains(event.target) &&
-        !pickerToggle.contains(event.target)) {
+        !pickerToggle.contains(event.target) &&
+        !canvas.contains(event.target) &&
+        !hexValue.contains(event.target) &&
+        !rgbValue.contains(event.target)
+    ) {
         closePicker();
     }
 });
@@ -373,7 +376,7 @@ function syncPickerToColor() {
 function applyHsvColor() {
     const rgb = hsvToRgb(hsv.h, hsv.s, hsv.v);
 
-    setColor(...rgb);
+    setColor(...rgb, true);
     updatePickerVisual();
 }
 
@@ -459,3 +462,6 @@ function setupCopyButton(button, valueElement, defaultLabel) {
 // Initialize both buttons.
 setupCopyButton(copyHexButton, hexValue, "Copy HEX");
 setupCopyButton(copyRgbButton, rgbValue, "Copy RGB");
+
+// Initialize the editor without requiring an image.
+setColor(0, 0, 0);
