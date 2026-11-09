@@ -118,19 +118,12 @@ canvas[hidden] {
 }
 
 /* HSV picker button */
-.swatch-wrap {
-  position: relative;
-  width: 130px;
-  height: 130px;
-  flex: 0 0 130px;
-}
-
 #pickerToggle {
   position: absolute;
-  top: -10px;
-  left: -10px;
-  width: 34px;
-  height: 34px;
+  top: 0px;
+  left: 0px;
+  width: 25px;
+  height: 25px;
   padding: 0;
   border-radius: 8px;
   z-index: 2;
@@ -237,16 +230,27 @@ canvas[hidden] {
   background-image:
     linear-gradient(var(--overlay-color), var(--overlay-color)),
     repeating-linear-gradient(var(--stripe-angle),
-      #080808 0px,
-      #808080 18px,
-      #fff 36px,
-      #808080 54px,
-      #080808 72px
+      #080808 0px 8px,
+      #808080 8px 24px,
+      #fff 24px 40px,
+      #808080 40px 56px,
+      #080808 56px 64px
     );
 
   background-color: #172c36;
   border: 2px solid #87c9c5;
   border-radius: 10px
+}
+
+.swatch-wrap {
+  position: relative;
+  width: 130px;
+  height: auto;
+  flex: 0 0 130px;
+
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
 }
 
 .control-label {
