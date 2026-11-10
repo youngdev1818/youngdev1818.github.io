@@ -166,7 +166,7 @@ function parseAlpha(text) {
     return alpha >= 0 && alpha <= 1 ? alpha : null;
 }
 
-// extract values from color functions or plain number list.
+// Read color values from CSS functions or plain lists.
 function parseColorArguments(text, allowedNames) {
     const value = text.trim();
 
@@ -180,9 +180,15 @@ function parseColorArguments(text, allowedNames) {
 
         const parts = match[2].split(",").map(s => s.trim());
 
-        // Check the number of arguments in CSS functions.
-        if ((name === "rgb" || name === "hsl") && parts.length !== 3) return null;
-        if ((name === "rgba" || name === "hsla") && parts.length !== 4) return null;
+        // Validate argument counts for named functions.
+        const required = {
+            rgb: 3,
+            rgba: 4,
+            hsl: 3,
+            hsla: 4
+        };
+
+        if (name in required && parts.length !== required[name]) return null;
 
         return parts;
     }
