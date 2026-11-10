@@ -166,6 +166,34 @@ function parseAlpha(text) {
     return alpha >= 0 && alpha <= 1 ? alpha : null;
 }
 
+// extract values from color functions or plain number list.
+function parseColorArguments(text, allowedNames) {
+    const value = text.trim();
+
+    // Match rgb(...), rgba(...), hsl(...), or hsla(...).
+    const match = value.match(/^([a-z]+)\s*\(([^()]*)\)$/i);
+
+    if (match) {
+        const name = match[1].toLowerCase();
+
+        if (!allowedNames.includes(name)) return null;
+
+        const parts = match[2].split(",").map(s => s.trim());
+
+        // Check the number of arguments in CSS functions.
+        if ((name === "rgb" || name === "hsl") && parts.length !== 3) return null;
+        if ((name === "rgba" || name === "hsla") && parts.length !== 4) return null;
+
+        return parts;
+    }
+
+    // Reject unmatched or unknown function syntax.
+    if (/[()]/.test(value)) return null;
+
+    // Keep compatibility with our original number-list format.
+    return value.split(",").map(s => s.trim());
+}
+
 // Hex: #RRGGBB or #RRGGBBAA
 hexValue.addEventListener("change", () => {
     const hex = hexValue.value.trim();
@@ -186,9 +214,10 @@ hexValue.addEventListener("change", () => {
 
 // RGB: r, g, b, optional alpha
 rgbValue.addEventListener("change", () => {
-    const parts = rgbValue.value.split(",").map(s => s.trim());
+    const parts = parseColorArguments(rgbValue.value, ["rgb", "rgba"]);
 
-    const validRGB = (parts.length === 3 || parts.length === 4) &&
+    const validRGB = parts !== null &&
+        (parts.length === 3 || parts.length === 4) &&
         parts.slice(0, 3).every(s =>
             /^\d{1,3}$/.test(s) && Number(s) <= 255
         );
@@ -207,8 +236,10 @@ rgbValue.addEventListener("change", () => {
 });
 
 // Parse HSV or HSL text: hue, %, %, optional alpha
-function parseHueColor(text) {
-    const parts = text.split(",").map(s => s.trim());
+function parseHueColor(text, allowedNames) {
+    const parts = parseColorArguments(text, allowedNames);
+
+    if (parts === null) return null;
 
     if (parts.length !== 3 && parts.length !== 4) {
         return null;
@@ -238,7 +269,7 @@ function parseHueColor(text) {
 
 // HSV: h, s%, v%, optional alpha
 hsvValue.addEventListener("change", () => {
-    const parsed = parseHueColor(hsvValue.value);
+    const parsed = parseHueColor(hsvValue.value, ["hsv"]);
 
     if (!parsed) {
         updateColorValues();
@@ -257,7 +288,7 @@ hsvValue.addEventListener("change", () => {
 
 // HSL: h, s%, l%, optional alpha
 hslValue.addEventListener("change", () => {
-    const parsed = parseHueColor(hslValue.value);
+    const parsed = parseHueColor(hslValue.value, ["hsl", "hsla"]);
 
     if (!parsed) {
         updateColorValues();
@@ -638,26 +669,34 @@ function updateColorValues() {
     // HEX uses a rounded 8-bit alpha channel.
     hexValue.value = hasAlpha ? hex + alphaByte : hex;
 
-    // RGB keeps full 0.01% alpha precision.
-    rgbValue.value = `rgb(${r}, ${g}, ${b}${alphaSuffix})`;
+    // Format RGB as a valid CSS color function.
+    const rgbBody = `${r}, ${g}, ${b}`;
+
+    rgbValue.value = hasAlpha
+        ? `rgba(${rgbBody}, ${alphaText})`
+        : `rgb(${rgbBody})`;
 
     const hsvColor = rgbToHsv(r, g, b);
     const hslColor = rgbToHsl(r, g, b);
 
-    // Use the remembered hue for neutral colors.
+    // Preserve the remembered hue for neutral colors.
     const hue = hsvColor.s === 0 ? hsv.h : hsvColor.h;
 
-    hsvValue.value =
-        `hsv(${round2(hue)}, ` +
-        `${round2(hsvColor.s * 100)}%, ` +
-        `${round2(hsvColor.v * 100)}%)` +
-        alphaSuffix;
+    const hsvBody = `${round2(hue)}, ` +
+        `${round2(hsvColor.s * 100)}% ` +
+        `${round2(hsvColor.v * 100)}%`;
+    
+    const hslBody = `${round2(hue)}, ` +
+        `${round2(hslColor.s * 100)}% ` +
+        `${round2(hslColor.l * 100)}%`;
 
-    hslValue.value =
-        `hsl(${round2(hue)}, ` +
-        `${round2(hslColor.s * 100)}%, ` +
-        `${round2(hslColor.l * 100)}%)` +
-        alphaSuffix;
+    // HSV is an editor format, not a native CSS color function.
+    hsvValue.value = `hsv(${hsvBody})${alphaSuffix}`;
+
+    // HSL / HSLA are valid CSS functions.
+    hslValue.value = hasAlpha
+        ? `hsla(${hslBody}, ${alphaText})`
+        : `hsl(${hslBody})`;
 }
 // ===============================================
 
