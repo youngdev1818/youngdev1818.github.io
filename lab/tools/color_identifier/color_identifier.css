@@ -253,17 +253,41 @@ canvas[hidden] {
   gap: 8px;
 }
 
-.control-label {
+/* Alpha and background angle controls */
+.swatch-controls {
+  width: 130px;
+}
+
+.control-line {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 10px;
-  margin: 10px 0 5px;
-  font-size: clamp(0.8rem, 1.5vw, 1.1rem);
+  gap: 4px;
+  margin-top: 10px;
 }
 
-.control-label output {
+.control-line label {
+  font-size: 0.8rem;
+}
+
+.control-number {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  font-size: 0.8rem;
+}
+
+.control-number input {
+  width: 62px;
+  min-width: 0;
+  padding: 3px;
+  color: #e1f5f3;
+  background: #172c36;
+  border: 1px solid #518c90;
+  border-radius: 5px;
   font-family: monospace;
+  font-size: 0.8rem;
+  text-align: center;
 }
 
 #alphaSlider,
@@ -276,10 +300,11 @@ canvas[hidden] {
   cursor: pointer;
 }
 
+/* Values container */
 .values {
   text-align: left;
   flex: 1 1 320px;
-  max-width: 400px;
+  max-width: 520px;
 }
 
 .value-row {

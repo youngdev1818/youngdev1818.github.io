@@ -12,8 +12,13 @@ const placeholder = document.getElementById("placeholder");
 const swatch = document.getElementById("swatch");
 const hexValue = document.getElementById("hexValue");
 const rgbValue = document.getElementById("rgbValue");
+const hsvValue = document.getElementById("hsvValue");
+const hslValue = document.getElementById("hslValue");
+
 const copyHexButton = document.getElementById("copyHexButton");
 const copyRgbButton = document.getElementById("copyRgbButton");
+const copyHsvButton = document.getElementById("copyHsvButton");
+const copyHslButton = document.getElementById("copyHslButton");
 
 // Load the selected image onto the canvas.
 input.addEventListener("change", () => {
@@ -71,45 +76,75 @@ function updateSwatch() {
     swatch.style.setProperty("--stripe-angle", `${stripeAngle}deg`);
 }
 
-// Update the results swatch opacity.
+// ======= Precise alpha and angle controls =======
 const alphaSlider = document.getElementById("alphaSlider");
-const alphaOutput = document.getElementById("alphaOutput");
+const alphaPercentInput = document.getElementById("alphaPercentInput");
 
-alphaSlider.addEventListener("input", () => {
-    const percent = Number(alphaSlider.value);
+const stripeAngleSlider = document.getElementById("StripeAngleSlider");
+const stripeAngleInput = document.getElementById("StripeAngleInput");
+
+// Accept 0.01% increments and limit opacity to 0-100%
+function setOpacityPercent(value) {
+    const percent = Math.round(Math.max(0, Math.min(100, Number(value))) * 100) / 100;
+    
+    if (!Number.isFinite(percent)) return;
+
     swatchAlpha = percent / 100;
-    alphaOutput.textContent = `${percent}%`;
+    alphaSlider.value = percent;
+    alphaPercentInput.value = percent;
+
     updateSwatch();
+    updateColorValues();
+}
+
+alphaSlider.addEventListener("input", () => setOpacityPercent(alphaSlider.value));
+alphaPercentInput.addEventListener("change", () => {
+    if (alphaPercentInput.value.trim() === "") {
+        alphaPercentInput.value = swatchAlpha * 100;
+        return;
+    }
+    setOpacityPercent(alphaPercentInput.value);
 });
 
-// Rotate the grayscale preview background.
-const stripeAngleSlider = document.getElementById("stripeAngleSlider");
-const stripeAngleOutput = document.getElementById("stripeAngleOutput");
+// Rotate the stripe background in 0.1° increments.
+function setStripeAngle(value) {
+    const angle = Math.round(Math.max(0, Math.min(360, Number(value))) * 10) / 10;
 
-stripeAngleSlider.addEventListener("input", () => {
-    stripeAngle = Number(stripeAngleSlider.value);
-    stripeAngleOutput.textContent = `${stripeAngle}°`;
+    if (!Number.isFinite(angle)) return;
+
+    stripeAngle = angle;
+    stripeAngleSlider.value = angle;
+    stripeAngleInput.value = angle;
+
     updateSwatch();
+}
+
+stripeAngleSlider.addEventListener("input", () => setStripeAngle(stripeAngleSlider.value));
+stripeAngleInput.addEventListener("change", () => {
+    if (stripeAngleInput.value.trim() === "") {
+        stripeAngleInput.value = stripeAngle;
+        return;
+    }
+    setStripeAngle(stripeAngleInput.value);
 });
+// ============================================= 
 
 // Convert and synchronize HEX, RGB, and swatch values.
 function setColor(r, g, b, fromPicker = false) {
     currentColor = [r, g, b];
 
-    const hex = "#" + [r, g, b]
-        .map(value => value.toString(16).padStart(2, "0"))
-        .join("")
-        .toUpperCase();
-
-    hexValue.value = hex;
-    rgbValue.value = `${r}, ${g}, ${b}`;
-
     updateSwatch();
+
+    if (!fromPicker) {
+        syncPickerToColor();
+    }
+
+    updateColorValues();
 
     copyHexButton.disabled = false;
     copyRgbButton.disabled = false;
-
-    if (!fromPicker) syncPickerToColor();
+    copyHsvButton.disabled = false;
+    copyHslButton.disabled = false;
 }
 
 function UpdateColorReadout(x,y) {
@@ -118,40 +153,126 @@ function UpdateColorReadout(x,y) {
     setColor(pixel[0], pixel[1], pixel[2]);
 }
 
-// Accept manually entered HEX values.
+// ======= EDITABLE COLOR VALUES =======
+// Validate a CSS alpha value between 0 and 1.
+function parseAlpha(text) {
+    const value = text.trim();
+
+    if (!/^(?:\d+(?:\.\d*)?|\.\d+)$/.test(value)) {
+        return null;
+    }
+
+    const alpha = Number(value);
+    return alpha >= 0 && alpha <= 1 ? alpha : null;
+}
+
+// Hex: #RRGGBB or #RRGGBBAA
 hexValue.addEventListener("change", () => {
     const hex = hexValue.value.trim();
-
-    if (/^#[0-9a-fA-F]{6}$/.test(hex)) {
-        const r = parseInt(hex.slice(1, 3), 16);
-        const g = parseInt(hex.slice(3, 5), 16);
-        const b = parseInt(hex.slice(5, 7), 16);
-
-        setColor(r, g, b);
-    } else {
-        // Restore last valid color.
-        setColor(...currentColor);
+    
+    if (!/^#[0-9a-f]{6}(?:[0-9a-f]{2})?$/i.test(hex)) {
+        updateColorValues();
+        return;
     }
+
+    const r = parseInt(hex.slice(1, 3), 16);
+    const g = parseInt(hex.slice(3, 5), 16);
+    const b = parseInt(hex.slice(5, 7), 16);
+    const alpha = hex.length === 9 ? parseInt(hex.slice(7, 9), 16) / 255 : 1;
+
+    setOpacityPercent(alpha * 100);
+    setColor(r, g, b);
 });
 
-// Accept manually entered RGB values.
+// RGB: r, g, b, optional alpha
 rgbValue.addEventListener("change", () => {
-    const parts = rgbValue.value
-    .split(",")
-    .map(value => value.trim());
+    const parts = rgbValue.value.split(",").map(s => s.trim());
 
-    const valid = parts.length === 3 && parts.every(value =>
-        /^\d{1,3}$/.test(value) && Number(value) <= 255
-    );
+    const validRGB = (parts.length === 3 || parts.length === 4) &&
+        parts.slice(0, 3).every(s =>
+            /^\d{1,3}$/.test(s) && Number(s) <= 255
+        );
 
-    if (valid) {
-        const [r, g, b] = parts.map(Number);
-        setColor(r, g, b);
-    } else {
-        // Restore last valid color.
-        setColor(...currentColor);
+    const alpha = parts.length === 4 ? parseAlpha(parts[3]) : 1;
+
+    if (!validRGB || alpha === null) {
+        updateColorValues();
+        return;
     }
+
+    const [r, g, b] = parts.slice(0, 3).map(Number);
+
+    setOpacityPercent(alpha * 100);
+    setColor(r, g, b);
 });
+
+// Parse HSV or HSL text: hue, %, %, optional alpha
+function parseHueColor(text) {
+    const parts = text.split(",").map(s => s.trim());
+
+    if (parts.length !== 3 && parts.length !== 4) {
+        return null;
+    }
+
+    const numeric = /^\d+(?:\.\d+)?$/;
+    const percent = /^\d+(?:\.\d+)?%$/;
+
+    if (!numeric.test(parts[0]) ||
+        !percent.test(parts[1]) ||
+        !percent.test(parts[2])) {
+        return null;
+    }
+
+    const h = Number(parts[0]);
+    const s = Number(parts[1].slice(0, -1));
+    const level = Number(parts[2].slice(0, -1));
+
+    const alpha = parts.length === 4 ? parseAlpha(parts[3]) : 1;
+
+    if (h > 360 || s > 100 || level > 100 || alpha === null) {
+        return null;
+    }
+
+    return { h: h % 360, s: s / 100, level: level / 100, alpha };
+}
+
+// HSV: h, s%, v%, optional alpha
+hsvValue.addEventListener("change", () => {
+    const parsed = parseHueColor(hsvValue.value);
+
+    if (!parsed) {
+        updateColorValues();
+        return;
+    }
+
+    hsv = {
+        h: parsed.h,
+        s: parsed.s,
+        v: parsed.level
+    };
+
+    setOpacityPercent(parsed.alpha * 100);
+    applyHsvColor();
+});
+
+// HSL: h, s%, l%, optional alpha
+hslValue.addEventListener("change", () => {
+    const parsed = parseHueColor(hslValue.value);
+
+    if (!parsed) {
+        updateColorValues();
+        return;
+    }
+
+    const rgb = hslToRgb(parsed.h, parsed.s, parsed.level);
+
+    // Preserve an explicitly entered hue for gray colors.
+    hsv.h = parsed.h;
+
+    setOpacityPercent(parsed.alpha * 100);
+    setColor(...rgb);
+});
+// =====================================
 
 function updateLoupe(x, y, event, rect) {
     const center = LOUPE_SIZE / 2;
@@ -309,8 +430,7 @@ document.addEventListener("pointerdown", (event) => {
         !hsvPanel.contains(event.target) &&
         !pickerToggle.contains(event.target) &&
         !canvas.contains(event.target) &&
-        !hexValue.contains(event.target) &&
-        !rgbValue.contains(event.target)
+        !document.querySelector(".results").contains(event.target)
     ) {
         closePicker();
     }
@@ -327,7 +447,6 @@ window.addEventListener("resize", () => {
 });
 
 // ======= HSV COLOR ENGINE =======
-
 // Convert RGB to HSV.
 function rgbToHsv(r, g, b) {
     r /= 255;
@@ -466,8 +585,81 @@ hueSlider.addEventListener("input", () => {
 
     applyHsvColor();
 });
-
 // =====================
+
+// ======= HSL AND SHARED COLOR FORMATTING =======
+// Convert RGB to HSL.
+function rgbToHsl(r, g, b) {
+    const hue = rgbToHsv(r, g, b).h;
+
+    r /= 255;
+    g /= 255;
+    b /= 255;
+
+    const max = Math.max(r, g, b);
+    const min = Math.min(r, g, b);
+    const delta = max - min;
+    const l = (max + min) / 2;
+    const s = delta === 0 ? 0 : delta / (1 - Math.abs(2 * l - 1));
+
+    return { h: hue, s, l };
+}
+
+// Convert HSL to RGB using the existing HSV engine.
+function hslToRgb(h, s, l) {
+    const v = l + s * Math.min(l, 1 - l);
+    const HsvS = v === 0 ? 0 : 2 * (v - l) / v;
+
+    return hsvToRgb(h % 360, HsvS, v);
+}
+
+// Round numerical displays without unnecessary zeros.
+function round2(value) {
+    return Number(value.toFixed(2));
+}
+
+// Synchronize all four formats with currentColor and alpha.
+function updateColorValues() {
+    const [r, g, b] = currentColor;
+    const hex = "#" + currentColor
+        .map(n => n.toString(16).padStart(2, "0"))
+        .join("")
+        .toUpperCase();
+    
+    const alphaByte = Math.round(swatchAlpha * 255)
+        .toString(16)
+        .padStart(2, "0")
+        .toUpperCase();
+    
+    const hasAlpha = swatchAlpha < 1;
+    const alphaText = Number(swatchAlpha.toFixed(4));
+    const alphaSuffix = hasAlpha ? `, ${alphaText}` : "";
+
+    // HEX uses a rounded 8-bit alpha channel.
+    hexValue.value = hasAlpha ? hex + alphaByte : hex;
+
+    // RGB keeps full 0.01% alpha precision.
+    rgbValue.value = `rgb(${r}, ${g}, ${b}${alphaSuffix})`;
+
+    const hsvColor = rgbToHsv(r, g, b);
+    const hslColor = rgbToHsl(r, g, b);
+
+    // Use the remembered hue for neutral colors.
+    const hue = hsvColor.s === 0 ? hsv.h : hsvColor.h;
+
+    hsvValue.value =
+        `hsv(${round2(hue)}, ` +
+        `${round2(hsvColor.s * 100)}%, ` +
+        `${round2(hsvColor.v * 100)}%)` +
+        alphaSuffix;
+
+    hslValue.value =
+        `hsl(${round2(hue)}, ` +
+        `${round2(hslColor.s * 100)}%, ` +
+        `${round2(hslColor.l * 100)}%)` +
+        alphaSuffix;
+}
+// ===============================================
 
 // Reusable clipboard function
 function setupCopyButton(button, valueElement, defaultLabel) {
@@ -494,6 +686,8 @@ function setupCopyButton(button, valueElement, defaultLabel) {
 // Initialize both buttons.
 setupCopyButton(copyHexButton, hexValue, "Copy HEX");
 setupCopyButton(copyRgbButton, rgbValue, "Copy RGB");
+setupCopyButton(copyHsvButton, hsvValue, "Copy HSV");
+setupCopyButton(copyHslButton, hslValue, "Copy HSL");
 
 // Initialize the editor without requiring an image.
 setColor(0, 0, 0);

@@ -39,32 +39,62 @@
           aria-controls="hsvPanel">🎨</button>
           
         <div id="swatch"></div>
-        <div>
-          <label for="alphaSlider" class="control-label">
-             Alpha
-            <output id="alphaOutput">100%</output>
-          </label>
-          <input id="alphaSlider" type="range" min="0" max="100" step="1" value="100">
 
-          <label for="stripeAngleSlider" class="control-label">
-            Background
-            <output id="stripeAngleOutput">0°</output>
-          </label>
-          <input id="stripeAngleSlider" type="range" min="0" max="360" step="1" value="0">
+        <div class="swatch-controls">
+
+          <div class="control-line">
+            <label for="alphaSlider">Alpha</label>
+            <div class="control-number">
+              <input id="alphaPercentInput"
+                type="number" min="0" max="100"
+                step="0.01" value="100"
+                aria-label="Alpha percentage">
+              <span>%</span>
+            </div>
+          </div>
+          <input id="alphaSlider" type="range" min="0" max="100" step="0.01" value="100">
+
+          <div class="control-line">
+            <label for="StripeAngleSlider">Angle</label>
+            <div class="control-number">
+              <input id="StripeAngleInput"
+                type="number" min="0" max="360"
+                step="0.1" value="0"
+                aria-label="Background angle">
+              <span>°</span>
+            </div>
+          </div>
+          <input id="StripeAngleSlider" type="range" min="0" max="360" step="0.1" value="0">
+
         </div>
       </div>
 
       <div class="values">
+
         <div class="value-row">
           <label for="hexValue">HEX:</label>
-          <input type="text" id="hexValue" value="#000000" maxlength="7" spellcheck="false">
+          <input type="text" id="hexValue" value="#000000" maxlength="9" spellcheck="false">
           <button id="copyHexButton" disabled>Copy HEX</button>
         </div>
+
         <div class="value-row">
           <label for="rgbValue">RGB:</label>
           <input type="text" id="rgbValue" value="0, 0, 0" spellcheck="false">
           <button id="copyRgbButton" disabled>Copy RGB</button>
         </div>
+
+        <div class="value-row">
+          <label for="hsvValue">HSV:</label>
+          <input type="text" id="hsvValue" value="0, 0, 0" spellcheck="false">
+          <button id="copyHsvButton" disabled>Copy HSV</button>
+        </div>
+
+        <div class="value-row">
+          <label for="hslValue">HSL:</label>
+          <input type="text" id="hslValue" value="0, 0, 0" spellcheck="false">
+          <button id="copyHslButton" disabled>Copy HSL</button>
+        </div>
+
       </div>
     </section>
     
@@ -85,6 +115,7 @@
     <input id="hueSlider" type="range" min="0" max="359" value="180">
   </div>
 
+  <!-- Magnifier loupe -->
   <div id="loupe" hidden>
     <canvas id="loupeCanvas" width="120" height="120"></canvas>
     <div class="center-dot"></div>
