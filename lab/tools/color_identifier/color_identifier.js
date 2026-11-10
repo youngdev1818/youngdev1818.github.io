@@ -697,7 +697,7 @@ function updateColorValues() {
         `${round2(hslColor.l * 100)}%`;
 
     // HSV is an editor format, not a native CSS color function.
-    hsvValue.value = `hsv(${hsvBody})${alphaSuffix}`;
+    hsvValue.value = `hsv(${hsvBody}${alphaSuffix})`;
 
     // HSL / HSLA are valid CSS functions.
     hslValue.value = hasAlpha
