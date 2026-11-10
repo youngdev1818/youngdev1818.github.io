@@ -779,7 +779,7 @@ gradientAngleSlider.addEventListener("input", () => {
     setGradientAngle(gradientAngleSlider.valueAsNumber);
 });
 
-gradientAngleInput.addEventListener("input", () => {
+gradientAngleInput.addEventListener("change", () => {
     setGradientAngle(gradientAngleInput.valueAsNumber);
 });
 
