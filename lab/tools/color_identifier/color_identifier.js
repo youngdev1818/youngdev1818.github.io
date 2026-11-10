@@ -785,6 +785,87 @@ gradientAngleInput.addEventListener("change", () => {
 
 setupCopyButton(copyGradientButton, gradientCss, "Copy CSS");
 
+function renderGradientStops() {
+    gradientStopList.replaceChildren(...gradientStops.map(createGradientStopRow));
+    gradientBuilder.hidden = gradientStops.length === 0;
+    updateGradientPreview();
+}
+    
+function focusGradientStop(index, action) {
+    const row = gradientStopList.children[index];
+    const preferred = row?.querySelector(`[data-action="${action}"]:not(:disabled)`);
+    const fallback = row?.querySelector("button:not(:disabled)");
+    (preferred || fallback || addGradientColorButton).focus();
+}
+
+function moveGradientStop(from, to, focusAction) {
+    if (from === to || to < 0 || to >= gradientStops.length) return;
+
+    const [stop] = gradientStops.splice(from, 1);
+    gradientStops.splice(to, 0, stop);
+    renderGradientStops();
+    
+    if (focusAction) focusGradientStop(to, focusAction);
+}
+
+function createGradientStopRow(stop, index) {
+    const hex = "#" + stop.rgb
+        .map(channel => channel.toString(16).padStart(2, "0"))
+        .join("")
+        .toUpperCase();
+    
+    const row = document.createElement("li");
+    row.className = "gradient-stop";
+
+    const chip = document.createElement("span");
+    chip.className = "gradient-stop-chip";
+    chip.style.background = hex;
+
+    const label = document.createElement("code");
+    label.textContent = hex;
+
+    const actions = document.createElement("div");
+    actions.className = "gradient-stop-actions";
+    const stopName = `stop ${index + 1}, ${hex}`;
+
+    function addAction(action, text, description, onClick) {
+        const button = document.createElement("button");
+        button.type = "button";
+        button.textContent = text;
+        button.dataset.action = action;
+        button.setAttribute("aria-label", `${description} ${stopName}`);
+        button.addEventListener("click", onClick);
+        actions.append(button);
+        return button;
+    }
+    
+    const up = addAction("up", "↑", "Move up", () => {
+        moveGradientStop(index, index - 1, "up");
+    });
+    up.disabled = index === 0;
+
+    const down = addAction("down", "↓", "Move down", () => {
+        moveGradientStop(index, index + 1, "down");
+    });
+    down.disabled = index === gradientStops.length - 1;
+
+    addAction("remove", "x", "Remove", () => {
+        gradientStops.splice(index, 1);
+        renderGradientStops();
+        focusGradientStop(Math.min(index, gradientStops.length - 1), "remove");
+    });
+
+    row.append(chip, label, actions);
+
+    const handle = document.createElement("span");
+    handle.className = "gradient-stop-handle";
+    handle.textContent = "⋮⋮";
+    handle.setAttribute("aria-hidden", "true");
+    row.prepend(handle);
+
+    return row;
+}
+
 addGradientColorButton.addEventListener("click", () => {
     const stop = {
         id: nextGradientStopId,
@@ -795,26 +876,59 @@ addGradientColorButton.addEventListener("click", () => {
 
     nextGradientStopId += 1;
     gradientStops.push(stop);
-
-    const hex = "#" + stop.rgb
-        .map(channel => channel.toString(16).padStart(2, "0"))
-        .join("")
-        .toUpperCase();
-
-    const row = document.createElement("li");
-    row.className = "gradient-stop"
-
-    const chip = document.createElement("span");
-    chip.className = "gradient-stop-chip";
-    chip.style.backgroundColor = hex;
-
-    const label = document.createElement("code");
-    label.textContent = hex;
-
-    row.append(chip, label);
-    gradientStopList.append(row);
-
-    updateGradientPreview();
-    gradientBuilder.hidden = false;
+    renderGradientStops();
 });
+
+let stopDrag = null;
+
+function getStopRowAtPoint(event) {
+    const element = document.elementFromPoint(event.clientX, event.clientY);
+    const row = element?.closest(".gradient-stop");
+    return row?.parentElement === gradientStopList ? row : null;
+}
+
+gradientStopList.addEventListener("pointerdown", event => {
+    const handle = event.target.closest(".gradient-stop-handle");
+    if (!handle || event.button !== 0 || stopDrag || gradientStops.length < 2) return;
+
+    stopDrag = {
+        pointerId: event.pointerId,
+        source: handle.closest(".gradient-stop"),
+        target: null
+    };
+
+    gradientStopList.setPointerCapture(event.pointerId);
+});
+
+gradientStopList.addEventListener("pointermove", event => {
+    if (!stopDrag || stopDrag.pointerId !== event.pointerId) return;
+
+    const row = getStopRowAtPoint(event);
+    const target = row === stopDrag.source ? null : row;
+    if (target === stopDrag.target) return;
+
+    stopDrag.target?.classList.remove("gradient-stop-drop-target");
+    target?.classList.add("gradient-stop-drop-target");
+    stopDrag.target = target;
+});
+
+function endStopDrag(event, commit = false) {
+    if (stopDrag?.pointerId !== event.pointerId) return;
+
+    const { source, target } = stopDrag;
+    target?.classList.remove("gradient-stop-drop-target");
+    stopDrag = null;
+
+    if (commit) {
+        const rows = Array.from(gradientStopList.children);
+        const from = rows.indexOf(source);
+        const to = rows.indexOf(getStopRowAtPoint(event));
+
+        if (from !== -1) moveGradientStop(from, to);
+    }
+}
+
+gradientStopList.addEventListener("pointerup", event => endStopDrag(event, true));
+gradientStopList.addEventListener("pointercancel", endStopDrag);
+gradientStopList.addEventListener("lostpointercapture", endStopDrag);
 // =============================================
