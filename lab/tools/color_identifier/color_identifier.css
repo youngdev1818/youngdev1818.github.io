@@ -347,6 +347,66 @@ button:disabled {
   cursor: not-allowed;
 }
 
+.gradient-add-actions {
+  display: flex;
+  justify-content: center;
+  margin-top: 12px;
+}
+
+.gradient-builder {
+  margin-top: 16px;
+  padding: 20px;
+  border: 1px solid #317c83;
+  border-radius: 10px;
+  background: #101f29;
+  text-align: left;
+}
+
+.gradient-builder h2 {
+  margin: 0 0 14px;
+  color: #6ce7d5;
+}
+
+.gradient-builder-body {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  gap: 16px;
+}
+
+#gradientPreview {
+  flex: 0 0 130px;
+  width: 130px;
+  height: 130px;
+  border: 2px solid #87c9c5;
+  border-radius: 10px;
+}
+
+#gradientStopList {
+  flex: 1 1 150px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.gradient-stop {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+  padding: 8px;
+  border: 1px solid #518c90;
+  border-radius: 7px;
+  background: #172c36;
+}
+
+.gradient-stop-chip {
+  width: 20px;
+  height: 20px;
+  border: 1px solid #87c9c5;
+  border-radius: 4px;
+}
+
 @media (max-width: 450px) {
   .value-row {
     grid-template-columns: 40px minmax(0, 1fr) 85px;

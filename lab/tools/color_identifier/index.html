@@ -95,6 +95,22 @@
           <button id="copyHslButton" disabled>Copy HSL</button>
         </div>
 
+        <div class="gradient-add-actions">
+          <button id="addGradientColorButton" type="button" aria-controls="gradientBuilder">
+            + Add Color to Gradient
+          </button>
+        </div>
+
+      </div>
+    </section>
+
+    <section id="gradientBuilder" class="gradient-builder"
+      aria-labelledby="gradientBuilderHeading" hidden>
+      <h2 id="gradientBuilderHeading">Gradient Builder</h2>
+
+      <div class="gradient-builder-body">
+        <div id="gradientPreview" aria-hidden="true"></div>
+        <ul id="gradientStopList" role="list" aria-label="Saved gradient colors"></ul>
       </div>
     </section>
     

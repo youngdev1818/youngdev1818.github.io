@@ -731,3 +731,51 @@ setupCopyButton(copyHslButton, hslValue, "Copy HSL");
 
 // Initialize the editor without requiring an image.
 setColor(0, 0, 0);
+
+// ======= GRADIENT BUILDER: SAVE COLORS =======
+const addGradientColorButton = document.getElementById("addGradientColorButton");
+const gradientBuilder = document.getElementById("gradientBuilder");
+const gradientPreview = document.getElementById("gradientPreview");
+const gradientStopList = document.getElementById("gradientStopList");
+
+const gradientStops = [];
+let nextGradientStopId = 1;
+
+addGradientColorButton.addEventListener("click", () => {
+    const stop = {
+        id: nextGradientStopId,
+        rgb: [...currentColor],
+        alpha: swatchAlpha,
+        position: null
+    };
+
+    nextGradientStopId += 1;
+    gradientStops.push(stop);
+
+    const hex = "#" + stop.rgb
+        .map(channel => channel.toString(16).padStart(2, "0"))
+        .join("")
+        .toUpperCase();
+
+    const row = document.createElement("li");
+    row.className = "gradient-stop"
+
+    const chip = document.createElement("span");
+    chip.className = "gradient-stop-chip";
+    chip.style.backgroundColor = hex;
+
+    const label = document.createElement("code");
+    label.textContent = hex;
+
+    row.append(chip, label);
+    gradientStopList.append(row);
+
+    if (gradientStops.length === 1) {
+        const [r, g, b] = stop.rgb;
+        gradientPreview.style.backgroundColor =
+        `rgba(${r}, ${g}, ${b}, ${stop.alpha})`;
+    }
+
+    gradientBuilder.hidden = false;
+});
+// =============================================
