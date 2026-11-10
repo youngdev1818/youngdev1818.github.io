@@ -55,16 +55,16 @@
           <input id="alphaSlider" type="range" min="0" max="100" step="0.01" value="100">
 
           <div class="control-line">
-            <label for="StripeAngleSlider">Angle</label>
+            <label for="stripeAngleSlider">Angle</label>
             <div class="control-number">
-              <input id="StripeAngleInput"
+              <input id="stripeAngleInput"
                 type="number" min="0" max="360"
                 step="0.1" value="0"
                 aria-label="Background angle">
               <span>°</span>
             </div>
           </div>
-          <input id="StripeAngleSlider" type="range" min="0" max="360" step="0.1" value="0">
+          <input id="stripeAngleSlider" type="range" min="0" max="360" step="0.1" value="0">
 
         </div>
       </div>
@@ -109,8 +109,33 @@
       <h2 id="gradientBuilderHeading">Gradient Builder</h2>
 
       <div class="gradient-builder-body">
-        <div id="gradientPreview" aria-hidden="true"></div>
+        <div class="gradient-preview-controls">
+          <div id="gradientPreview" aria-hidden="true"></div>
+
+          <div class="control-line">
+            <label for="gradientAngleSlider">Angle</label>
+            <div class="control-number">
+              <input id="gradientAngleInput" type="number"
+                min="0" max="360" step="0.1" value="90"
+                aria-label="Gradient angle">
+              <span>°</span>
+            </div>
+          </div>
+
+          <input id="gradientAngleSlider" type="range"
+            min="0" max="360" step="0.1" value="90">
+        </div>
+
         <ul id="gradientStopList" role="list" aria-label="Saved gradient colors"></ul>
+      </div>
+
+      <div class="gradient-output">
+        <label for="gradientCss">Gradient CSS</label>
+        <div class="gradient-output-row">
+          <input id="gradientCss" type="text" readonly
+            placeholder="Add 2 or more colors to build a gradient">
+          <button id="copyGradientButton" type="button" disabled>Copy CSS</button>
+        </div>
       </div>
     </section>
     

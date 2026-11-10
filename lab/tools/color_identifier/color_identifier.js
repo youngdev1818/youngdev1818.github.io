@@ -80,8 +80,8 @@ function updateSwatch() {
 const alphaSlider = document.getElementById("alphaSlider");
 const alphaPercentInput = document.getElementById("alphaPercentInput");
 
-const stripeAngleSlider = document.getElementById("StripeAngleSlider");
-const stripeAngleInput = document.getElementById("StripeAngleInput");
+const stripeAngleSlider = document.getElementById("stripeAngleSlider");
+const stripeAngleInput = document.getElementById("stripeAngleInput");
 
 // Accept 0.01% increments and limit opacity to 0-100%
 function setOpacityPercent(value) {
@@ -741,6 +741,50 @@ const gradientStopList = document.getElementById("gradientStopList");
 const gradientStops = [];
 let nextGradientStopId = 1;
 
+const gradientAngleSlider = document.getElementById("gradientAngleSlider");
+const gradientAngleInput = document.getElementById("gradientAngleInput");
+const gradientCss = document.getElementById("gradientCss");
+const copyGradientButton = document.getElementById("copyGradientButton");
+
+let gradientAngle = Number(gradientAngleSlider.value);
+
+function updateGradientPreview() {
+    const colors = gradientStops.map(stop => {
+        const [r, g, b] = stop.rgb;
+        const alpha = Number(stop.alpha.toFixed(4));
+        return `rgba(${r}, ${g}, ${b}, ${alpha})`;
+    });
+
+    const css = colors.length >= 2
+        ? `linear-gradient(${gradientAngle}deg, ${colors.join(", ")})`
+        : "";
+
+    gradientPreview.style.background = css || colors[0] || "";
+    gradientCss.value = css;
+    copyGradientButton.disabled = css === "";
+}
+
+function setGradientAngle(value) {
+    if (Number.isFinite(value)) {
+        const clamped = Math.max(0, Math.min(360, value));
+        gradientAngle = Math.round(clamped * 10) / 10;
+    }
+
+    gradientAngleSlider.value = gradientAngle;
+    gradientAngleInput.value = gradientAngle;
+    updateGradientPreview();
+}
+
+gradientAngleSlider.addEventListener("input", () => {
+    setGradientAngle(gradientAngleSlider.valueAsNumber);
+});
+
+gradientAngleInput.addEventListener("input", () => {
+    setGradientAngle(gradientAngleInput.valueAsNumber);
+});
+
+setupCopyButton(copyGradientButton, gradientCss, "Copy CSS");
+
 addGradientColorButton.addEventListener("click", () => {
     const stop = {
         id: nextGradientStopId,
@@ -770,12 +814,7 @@ addGradientColorButton.addEventListener("click", () => {
     row.append(chip, label);
     gradientStopList.append(row);
 
-    if (gradientStops.length === 1) {
-        const [r, g, b] = stop.rgb;
-        gradientPreview.style.backgroundColor =
-        `rgba(${r}, ${g}, ${b}, ${stop.alpha})`;
-    }
-
+    updateGradientPreview();
     gradientBuilder.hidden = false;
 });
 // =============================================

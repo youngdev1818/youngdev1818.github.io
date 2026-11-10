@@ -291,7 +291,8 @@ canvas[hidden] {
 }
 
 #alphaSlider,
-#stripeAngleSlider {
+#stripeAngleSlider,
+#gradientAngleSlider {
   display: block;
   width: 100%;
   height: 16px;
@@ -347,6 +348,10 @@ button:disabled {
   cursor: not-allowed;
 }
 
+#addGradientColorButton {
+  font-size: clamp(0.8rem, 1.2vw, 1.5rem);
+}
+
 .gradient-add-actions {
   display: flex;
   justify-content: center;
@@ -374,8 +379,11 @@ button:disabled {
   gap: 16px;
 }
 
-#gradientPreview {
+.gradient-preview-controls {
   flex: 0 0 130px;
+}
+
+#gradientPreview {
   width: 130px;
   height: 130px;
   border: 2px solid #87c9c5;
@@ -405,6 +413,29 @@ button:disabled {
   height: 20px;
   border: 1px solid #87c9c5;
   border-radius: 4px;
+}
+
+.gradient-output {
+  margin-top: 16px;
+}
+
+.gradient-output-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 8px;
+  margin-top: 6px;
+}
+
+#gradientCss {
+  width: 100%;
+  min-width: 0;
+  padding: 10px;
+  border: 1px solid #518c90;
+  border-radius: 7px;
+  background: #172c36;
+  color: #e1f5f3;
+  font-family: monospace;
 }
 
 @media (max-width: 450px) {
