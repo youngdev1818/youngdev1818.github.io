@@ -223,7 +223,7 @@ rgbValue.addEventListener("change", () => {
             /^\d{1,3}$/.test(s) && Number(s) <= 255
         );
 
-    const alpha = parts.length === 4 ? parseAlpha(parts[3]) : 1;
+    const alpha = parts?.length === 4 ? parseAlpha(parts[3]) : 1;
 
     if (!validRGB || alpha === null) {
         updateColorValues();
@@ -259,7 +259,7 @@ function parseHueColor(text, allowedNames) {
     const s = Number(parts[1].slice(0, -1));
     const level = Number(parts[2].slice(0, -1));
 
-    const alpha = parts.length === 4 ? parseAlpha(parts[3]) : 1;
+    const alpha = parts?.length === 4 ? parseAlpha(parts[3]) : 1;
 
     if (h > 360 || s > 100 || level > 100 || alpha === null) {
         return null;
@@ -684,11 +684,11 @@ function updateColorValues() {
     const hue = hsvColor.s === 0 ? hsv.h : hsvColor.h;
 
     const hsvBody = `${round2(hue)}, ` +
-        `${round2(hsvColor.s * 100)}% ` +
+        `${round2(hsvColor.s * 100)}%, ` +
         `${round2(hsvColor.v * 100)}%`;
     
     const hslBody = `${round2(hue)}, ` +
-        `${round2(hslColor.s * 100)}% ` +
+        `${round2(hslColor.s * 100)}%, ` +
         `${round2(hslColor.l * 100)}%`;
 
     // HSV is an editor format, not a native CSS color function.
